@@ -9,6 +9,7 @@
 #define PLAYER_CANNON_HEIGTH 20
 #define PLAYER_MAX_X SCREEN_WIDTH - 10 - PLAYER_WIDTH
 #define PLAYER_MIN_X 10
+#define PLAYER_SPEED 5
 
 
 void paint_player(){
@@ -23,14 +24,16 @@ void paint_player(){
 }
 
 void player_move_right(){
-    if(Player.x_coord < PLAYER_MAX_X){
-        Player.x_coord++;
+    Player.x_coord += PLAYER_SPEED;
+    if(Player.x_coord > PLAYER_MAX_X){
+        Player.x_coord = PLAYER_MAX_X;
     }
 }
 
 void player_move_left(){
-    if(Player.x_coord > PLAYER_MIN_X){
-        Player.x_coord--;
+    Player.x_coord -= PLAYER_SPEED;
+    if(Player.x_coord < PLAYER_MIN_X){
+        Player.x_coord = PLAYER_MIN_X;
     }
 }
 
