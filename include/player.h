@@ -1,4 +1,5 @@
 #define PLAYER_Y_COORD 400
+//TODO: add include guards
 
 typedef struct {
     unsigned int Life;

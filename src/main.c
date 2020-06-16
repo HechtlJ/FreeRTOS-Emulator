@@ -21,6 +21,7 @@
 #include "AsyncIO.h"
 
 #include "player.h"
+#include "rendering.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -134,11 +135,13 @@ int main(int argc, char *argv[])
         PRINT_ERROR("Failed to create buttons lock");
         goto err_buttons_lock;
     }
-
+    /*
     if (xTaskCreate(vDemoTask, "DemoTask", mainGENERIC_STACK_SIZE * 2, NULL,
                     mainGENERIC_PRIORITY, &DemoTask) != pdPASS) {
         goto err_demotask;
-    }
+    }*/
+
+    renderInit();
 
     vTaskStartScheduler();
 
