@@ -1,16 +1,22 @@
+#include "FreeRTOS.h"
+#include "semphr.h"
+
+
 #define PLAYER_Y_COORD 400
-//TODO: add include guards
+//TODO: add include guards 
 
 typedef struct {
     unsigned int Life;
     unsigned int x_coord;
 } player_t;
 
+player_t Player;
+xSemaphoreHandle PlayerHandle;
 
 
 
-void paint_player(player_t *player);
-void player_move_right(player_t *player);
-void player_move_left(player_t *player);
-void player_shoot(player_t *player);
-void player_reduce_life(player_t *player);
+void xPaintPlayer();
+void xPlayerMoveRight();
+void xPlayerMoveLeft();
+void player_shoot();
+void player_reduce_life();

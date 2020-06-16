@@ -1,12 +1,13 @@
 #include "rendering.h"
 #include "TUM_Draw.h"
 #include "player.h"
+#include "semphr.h"
 
 TaskHandle_t RenderingTask = NULL;
 
 void vRender(void *pvParameters){
-    player_t player;
-    player.x_coord = 200;
+    //player_t player;
+    //player.x_coord = 200;
 
     // Needed such that Gfx library knows which thread controlls drawing
     // Only one thread can call tumDrawUpdateScreen while and thread can call
@@ -17,9 +18,8 @@ void vRender(void *pvParameters){
 
     for(;;){
         tumDrawClear(Black); // Clear screen
-
-        paint_player(&player);
-        player_move_left(&player);
+        xPaintPlayer();
+        
         tumDrawUpdateScreen(); // Refresh the screen to draw string
 
 

@@ -22,29 +22,15 @@
 
 #include "player.h"
 #include "rendering.h"
+#include "button_input.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
 
-static TaskHandle_t DemoTask = NULL;
+//static TaskHandle_t DemoTask = NULL;
 
-typedef struct buttons_buffer {
-    unsigned char buttons[SDL_NUM_SCANCODES];
-    SemaphoreHandle_t lock;
-} buttons_buffer_t;
 
-static buttons_buffer_t buttons = { 0 };
-
-void xGetButtonInput(void)
-{
-    if (xSemaphoreTake(buttons.lock, 0) == pdTRUE) {
-        xQueueReceive(buttonInputQueue, &buttons.buttons, 0);
-        xSemaphoreGive(buttons.lock);
-    }
-}
-
-#define KEYCODE(CHAR) SDL_SCANCODE_##CHAR
-
+/*
 void vDemoTask(void *pvParameters)
 {
     // structure to store time retrieved from Linux kernel
@@ -102,7 +88,7 @@ void vDemoTask(void *pvParameters)
         // Basic sleep of 1000 milliseconds
         vTaskDelay((TickType_t)1000);
     }
-}
+}*/
 
 int main(int argc, char *argv[])
 {
@@ -129,26 +115,30 @@ int main(int argc, char *argv[])
         PRINT_ERROR("Failed to initialize audio");
         goto err_init_audio;
     }
-
+/*
     buttons.lock = xSemaphoreCreateMutex(); // Locking mechanism
     if (!buttons.lock) {
         PRINT_ERROR("Failed to create buttons lock");
         goto err_buttons_lock;
-    }
+    }*/
     /*
     if (xTaskCreate(vDemoTask, "DemoTask", mainGENERIC_STACK_SIZE * 2, NULL,
                     mainGENERIC_PRIORITY, &DemoTask) != pdPASS) {
         goto err_demotask;
     }*/
 
+    Player.x_coord = 200;
+    PlayerHandle = xSemaphoreCreateMutex();
+
     renderInit();
+    buttonInit();
 
     vTaskStartScheduler();
 
     return EXIT_SUCCESS;
 
 err_demotask:
-    vSemaphoreDelete(buttons.lock);
+    //vSemaphoreDelete(buttons.lock);
 err_buttons_lock:
     tumSoundExit();
 err_init_audio:
