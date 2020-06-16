@@ -1,4 +1,4 @@
-
+#define PLAYER_Y_COORD 400
 
 typedef struct {
     unsigned int Life;

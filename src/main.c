@@ -20,6 +20,8 @@
 
 #include "AsyncIO.h"
 
+#include "player.h"
+
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
 
@@ -48,6 +50,8 @@ void vDemoTask(void *pvParameters)
     static struct timespec the_time;
     static char our_time_string[100];
     static int our_time_strings_width = 0;
+    player_t player;
+    player.x_coord = 200;
 
     // Needed such that Gfx library knows which thread controlls drawing
     // Only one thread can call tumDrawUpdateScreen while and thread can call
@@ -91,6 +95,7 @@ void vDemoTask(void *pvParameters)
                         SCREEN_HEIGHT / 2 - DEFAULT_FONT_SIZE / 2,
                         TUMBlue);
 
+        paint_player(&player);
         tumDrawUpdateScreen(); // Refresh the screen to draw string
 
         // Basic sleep of 1000 milliseconds
