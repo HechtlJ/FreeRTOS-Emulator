@@ -100,6 +100,11 @@ void vDemoTask(void *pvParameters)
 
 int main(int argc, char *argv[])
 {
+    if(strcmp(argv, "debug")){
+        printf("Debug Mode\n");
+    }else{
+        printf("Normal Mode\n");
+    }
     char *bin_folder_path = tumUtilGetBinFolderPath(argv[0]);
 
     printf("Initializing: ");
