@@ -43,6 +43,9 @@ void vHandleButtons(void *pvParameters){
             }else if(buttons.buttons[SDL_SCANCODE_RIGHT]){
                 xPlayerMoveRight();
             }
+            if(buttons.buttons[SDL_SCANCODE_UP]){
+                xPlayerShoot();
+            }
             xSemaphoreGive(buttons.lock);
         }
         vTaskDelay((TickType_t) (1000/30));

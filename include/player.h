@@ -18,5 +18,6 @@ xSemaphoreHandle PlayerHandle;
 void xPaintPlayer();
 void xPlayerMoveRight();
 void xPlayerMoveLeft();
+void xPlayerShoot();
 void player_shoot();
 void player_reduce_life();

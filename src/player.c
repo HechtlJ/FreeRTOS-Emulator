@@ -1,7 +1,7 @@
 #include "player.h"
 #include "TUM_Draw.h"
 #include <stdio.h>
-
+#include "cannonball.h"
 
 #define PLAYER_WIDTH 60
 #define PLAYER_BODY_HEIGTH 25
@@ -37,6 +37,10 @@ void player_move_left(){
     }
 }
 
+void player_shoot(){
+    create_cannonball(Player.x_coord, PLAYER_Y_COORD);
+}
+
 void xPaintPlayer(){
     if(xSemaphoreTake(PlayerHandle, ( TickType_t ) 10 ) == pdTRUE){
             paint_player();
@@ -61,6 +65,15 @@ void xPlayerMoveRight(){
 void xPlayerMoveLeft(){
     if(xSemaphoreTake(PlayerHandle, NULL) == pdTRUE){
             player_move_left();
+            xSemaphoreGive(PlayerHandle);
+    }else{
+        //do some error handling
+    }
+}
+
+void xPlayerShoot(){
+    if(xSemaphoreTake(PlayerHandle, NULL) == pdTRUE){
+            player_shoot();
             xSemaphoreGive(PlayerHandle);
     }else{
         //do some error handling

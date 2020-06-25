@@ -23,6 +23,7 @@
 #include "player.h"
 #include "rendering.h"
 #include "button_input.h"
+#include "cannonball.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -129,9 +130,12 @@ int main(int argc, char *argv[])
 
     Player.x_coord = 200;
     PlayerHandle = xSemaphoreCreateMutex();
+    CannonballHandle = xSemaphoreCreateMutex();
+    init_cannonballs();
 
     renderInit();
     buttonInit();
+    
 
     vTaskStartScheduler();
 
