@@ -38,7 +38,9 @@ void player_move_left(){
 }
 
 void player_shoot(){
-    create_cannonball(Player.x_coord, PLAYER_Y_COORD);
+    int x = Player.x_coord + (0.5*PLAYER_WIDTH) - (0.5*CANNONBALL_WIDTH);
+    int y = PLAYER_Y_COORD - PLAYER_CANNON_HEIGTH;
+    create_cannonball(x, y);
 }
 
 void xPaintPlayer(){
