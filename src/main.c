@@ -24,6 +24,7 @@
 #include "rendering.h"
 #include "button_input.h"
 #include "cannonball.h"
+#include "projectiles.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -135,6 +136,7 @@ int main(int argc, char *argv[])
 
     renderInit();
     buttonInit();
+    projectileInit();
     
 
     vTaskStartScheduler();

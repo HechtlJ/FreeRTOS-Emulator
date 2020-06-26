@@ -28,6 +28,17 @@ void create_cannonball(int x, int y){
     }
 }
 
+void move_cannonballs(){
+    for(int i=0; i<MAX_NUM_CANNONBALLS; i++){
+        if(CannonBalls[i].exists){
+            CannonBalls[i].exists = true;
+            CannonBalls[i].y_coord -= CANNONBALL_VELOCITY;
+            if(CannonBalls[i].y_coord < 0)
+                CannonBalls[i].exists = false;
+        }
+    }
+}
+
 
 void xPaintCannonballs(){
     if(xSemaphoreTake(CannonballHandle, ( TickType_t ) 10 ) == pdTRUE){
@@ -42,6 +53,16 @@ void xPaintCannonballs(){
 void xCreateCannonball(int x, int y){
     if(xSemaphoreTake(CannonballHandle, ( TickType_t ) 10 ) == pdTRUE){
             create_cannonball(x, y);
+            xSemaphoreGive(CannonballHandle);
+    }else{
+        //do some error handling
+        printf("error in painintg player");
+    }
+}
+
+void xMoveCannonballs(){
+    if(xSemaphoreTake(CannonballHandle, ( TickType_t ) 10 ) == pdTRUE){
+            move_cannonballs();
             xSemaphoreGive(CannonballHandle);
     }else{
         //do some error handling

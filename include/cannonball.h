@@ -6,15 +6,15 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 
-#define CANNONBALL_VELOCITY
+#define CANNONBALL_VELOCITY 10
 #define CANNONBALL_WIDTH 5
 #define CANNONBALL_HEIGHT 15
 #define MAX_NUM_CANNONBALLS 50
-#define RELOAD_TIME 30
+#define RELOAD_TIME 20
 
 typedef struct {
-    unsigned int x_coord;
-    unsigned int y_coord;
+    int x_coord;
+    int y_coord;
     bool exists;
 } cannonball_t;
 
@@ -23,9 +23,11 @@ xSemaphoreHandle CannonballHandle;
 
 void xPaintCannonballs();
 void xCreateCannonball(int x, int y);
+void xMoveCannonballs();
 void init_cannonballs();
 void paint_cannonballs();
 void create_cannonball(int x, int y);
+void move_cannonballs();
 
 
 #endif /* CANNONBALL_H */

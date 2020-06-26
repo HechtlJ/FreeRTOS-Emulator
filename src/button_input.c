@@ -3,6 +3,7 @@
 #include "semphr.h"
 #include <SDL2/SDL_scancode.h>
 #include "player.h"
+#include "projectiles.h"
 
 TaskHandle_t ButtonTask;
 
@@ -44,7 +45,12 @@ void vHandleButtons(void *pvParameters){
                 xPlayerMoveRight();
             }
             if(buttons.buttons[SDL_SCANCODE_UP]){
-                xPlayerShoot();
+                unsigned int msg = CMD_PLAYER_SHOOT;
+                /* Block time of 0 says don't block if the queue is already full.*/
+                if( xQueueSend( ProjectilesQueue, ( void * ) &msg, ( TickType_t ) 0 ) != pdPASS )
+                {
+                    /* Failed to post the message, even after 10 ticks. */
+                }
             }
             xSemaphoreGive(buttons.lock);
         }

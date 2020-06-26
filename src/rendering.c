@@ -4,7 +4,7 @@
 #include "semphr.h"
 #include "cannonball.h"
 
-TaskHandle_t RenderingTask = NULL;
+TaskHandle_t RenderingTask;
 
 void vRender(void *pvParameters){
     //player_t player;
