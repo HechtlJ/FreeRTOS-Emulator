@@ -25,6 +25,7 @@
 #include "button_input.h"
 #include "cannonball.h"
 #include "projectiles.h"
+#include "bunker.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -132,7 +133,10 @@ int main(int argc, char *argv[])
     Player.x_coord = 200;
     PlayerHandle = xSemaphoreCreateMutex();
     CannonballHandle = xSemaphoreCreateMutex();
+    BunkerHandle = xSemaphoreCreateMutex();
+    
     init_cannonballs();
+    init_bunkers();
 
     renderInit();
     buttonInit();

@@ -3,6 +3,7 @@
 #include "player.h"
 #include "semphr.h"
 #include "cannonball.h"
+#include "bunker.h"
 
 TaskHandle_t RenderingTask;
 
@@ -21,6 +22,7 @@ void vRender(void *pvParameters){
         tumDrawClear(Black); // Clear screen
         xPaintPlayer();
         xPaintCannonballs();
+        xPaintBunkers();
         
         tumDrawUpdateScreen(); // Refresh the screen to draw string
 
