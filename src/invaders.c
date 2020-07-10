@@ -11,7 +11,12 @@ void vHandleInvaders(void *pvParameters){
 
     for(;;){
 
-
+        if(show_bmp1){
+            show_bmp1=false;
+        }else{
+            show_bmp1=true;
+        }
+        move_invaders_right();
         vTaskDelay((TickType_t) 1000);
     }
 }
@@ -55,6 +60,13 @@ void invaderInit(){
         }
         y+= INVADER_SPACE_VERTICAL + INVADER_HEIGHT;
     }
+
+    if(xTaskCreate(vHandleInvaders, "InvaderTask", mainGENERIC_STACK_SIZE*2, NULL,
+     configMAX_PRIORITIES-1, &InvaderTask) != pdPASS) {
+         //PRINT_TASK_ERROR("RenderTask");
+         //goto err_rendertask;
+        printf("error in creating invader task\n");
+    }
 }
 
 void paint_invaders(){
@@ -72,6 +84,34 @@ void paint_invaders(){
             
         }
     }
+}
+
+void move_invaders_right(){
+    for(int r=0; r<NUM_INVADER_ROWS; r++){
+        for(int c=0; c<NUM_INVADER_COLUMNS; c++){
+            Invaders[r][c].x+=INVADER_SIDE_STEP;
+        }
+    }
+}
+
+void move_invaders_left(){
+    for(int r=0; r<NUM_INVADER_ROWS; r++){
+        for(int c=0; c<NUM_INVADER_COLUMNS; c++){
+            Invaders[r][c].x-=INVADER_SIDE_STEP;
+        }
+    }
+}
+
+void move_invaders_down(){
+    for(int r=0; r<NUM_INVADER_ROWS; r++){
+        for(int c=0; c<NUM_INVADER_COLUMNS; c++){
+            Invaders[r][c].y+=INVADER_SIDE_STEP;
+        }
+    }
+}
+
+void move_invaders(){
+    
 }
 
 
