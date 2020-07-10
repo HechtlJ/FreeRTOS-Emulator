@@ -64,5 +64,6 @@ invader_t Invaders[NUM_INVADER_ROWS][NUM_INVADER_COLUMNS];
 
 void paint_invaders();
 void move_invaders();
+int invaders_check_hit(int x, int y, int w, int h);
 
 #endif /* INVADERS_H */

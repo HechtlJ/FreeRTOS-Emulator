@@ -5,6 +5,7 @@
 #include "projectiles.h"
 #include "stdio.h"
 #include "bunker.h"
+#include "invaders.h"
 
 TaskHandle_t ProjectileTask;
 
@@ -21,9 +22,16 @@ void vHandleProjectiles(void *pvParameters){
 
     for(;;){
         xMoveCannonballs();
+        //TODO: One or multiple cannonballs?
 
-        if(hitBunker(CannonBalls[0].x_coord, CannonBalls[0].y_coord, CANNONBALL_WIDTH, CANNONBALL_HEIGHT)){
-            CannonBalls[0].exists = false;
+
+        if(CannonBalls[0].exists){
+            if(hitBunker(CannonBalls[0].x_coord, CannonBalls[0].y_coord, CANNONBALL_WIDTH, CANNONBALL_HEIGHT)){
+                CannonBalls[0].exists = false;
+            }
+            if(invaders_check_hit(CannonBalls[0].x_coord, CannonBalls[0].y_coord, CANNONBALL_WIDTH, CANNONBALL_HEIGHT)){
+                CannonBalls[0].exists = false;
+            }
         }
 
         if(time_to_reload > 0){

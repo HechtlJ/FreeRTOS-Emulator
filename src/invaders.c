@@ -77,12 +77,13 @@ void paint_invaders(){
     for(int r=0; r<NUM_INVADER_ROWS; r++){
         for(int c=0; c<NUM_INVADER_COLUMNS; c++){
             invader = &Invaders[r][c];
-            if (show_bmp1){
-                tumDrawLoadedImage(invader->type->bmp1, invader->x, invader->y);
-            }else{
-                tumDrawLoadedImage(invader->type->bmp2, invader->x, invader->y);
+            if(invader->alive){
+                if (show_bmp1){
+                    tumDrawLoadedImage(invader->type->bmp1, invader->x, invader->y);
+                }else{
+                    tumDrawLoadedImage(invader->type->bmp2, invader->x, invader->y);
+                }
             }
-            
             
         }
     }
@@ -138,6 +139,26 @@ void move_invaders(){
             movement = MOVING_LEFT;
         }
     }
+}
+
+int invaders_check_hit(int x, int y, int w, int h){
+    int min_x = x;
+    int min_y = y;
+    int max_x = x+w;
+    int max_y = y+h;
+    for(int r=0; r<NUM_INVADER_ROWS; r++){
+        if(Invaders[r][0].y <= min_y && (Invaders[r][0].y+INVADER_HEIGHT) >= max_y){
+            for(int c=0; c<NUM_INVADER_COLUMNS; c++){
+                if(Invaders[r][c].x <= min_x && (Invaders[r][c].x+INVADER_WIDTH) >= max_x){
+                    if(Invaders[r][c].alive){
+                        Invaders[r][c].alive = false;
+                        return 1; //Hit
+                    }
+                }
+            }
+        }
+    }
+    return 0;
 }
 
 
