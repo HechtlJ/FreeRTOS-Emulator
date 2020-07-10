@@ -26,6 +26,7 @@
 #include "cannonball.h"
 #include "projectiles.h"
 #include "bunker.h"
+#include "invaders.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -137,6 +138,8 @@ int main(int argc, char *argv[])
     
     init_cannonballs();
     init_bunkers();
+
+    invaderInit();
 
     renderInit();
     buttonInit();

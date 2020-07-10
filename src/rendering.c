@@ -4,6 +4,7 @@
 #include "semphr.h"
 #include "cannonball.h"
 #include "bunker.h"
+#include "invaders.h"
 
 TaskHandle_t RenderingTask;
 
@@ -23,6 +24,8 @@ void vRender(void *pvParameters){
         xPaintPlayer();
         xPaintCannonballs();
         xPaintBunkers();
+
+        paint_invaders();
         
         tumDrawUpdateScreen(); // Refresh the screen to draw string
 

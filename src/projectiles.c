@@ -39,7 +39,7 @@ void vHandleProjectiles(void *pvParameters){
             }
         }        
 
-        vTaskDelay((TickType_t) (1000/30));
+        vTaskDelay((TickType_t) (1000/60));
     }
 
 }
