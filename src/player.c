@@ -3,13 +3,7 @@
 #include <stdio.h>
 #include "cannonball.h"
 
-#define PLAYER_WIDTH 60
-#define PLAYER_BODY_HEIGTH 25
-#define PLAYER_CANNON_WIDTH 8
-#define PLAYER_CANNON_HEIGTH 20
-#define PLAYER_MAX_X SCREEN_WIDTH - 10 - PLAYER_WIDTH
-#define PLAYER_MIN_X 10
-#define PLAYER_SPEED 5
+
 
 
 void paint_player(){
