@@ -8,9 +8,11 @@
 #include "TUM_Draw.h"
 
 #define NUM_BUNKERS 4
-#define BUNKER_WIDTH 90.0
-#define BUNKER_RIM 30.0
+#define BUNKER_WIDTH 80
+#define BUNKER_RIM 30
 #define BUNKER_Y_COORD 320
+
+#define BUNKER_HEIGHT 30
 
 
 typedef struct {
@@ -27,6 +29,8 @@ void paint_bunkers();
 
 
 void xPaintBunkers();
+
+int hitBunker(int x, int y, int w, int h);
 
 
 
