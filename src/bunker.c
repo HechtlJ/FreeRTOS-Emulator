@@ -36,3 +36,29 @@ void xPaintBunkers(){
         printf("error in painting bunker");
     }
 }
+
+
+int hitBunker(int x, int y, int w, int h){
+    // Check height
+    int y_min=y;
+    int y_max=y+h;
+
+    if(y_max < BUNKER_Y_COORD || y_min > BUNKER_Y_COORD+BUNKER_HEIGHT)
+        return 0; //no collision
+   
+
+    int x_min = x;
+    int x_max = x + w;
+    
+    for(int i=0; i<NUM_BUNKERS; i++){
+        if(x_max < Bunkers[i].x || x_min > Bunkers[i].x + BUNKER_WIDTH){
+            
+            
+        }else{
+            printf("collision\n");
+            return 1; // collision
+        }
+
+    }
+    return 0;
+}

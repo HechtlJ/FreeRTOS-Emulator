@@ -46,7 +46,7 @@ void xPaintCannonballs(){
             xSemaphoreGive(CannonballHandle);
     }else{
         //do some error handling
-        printf("error in painintg player");
+        printf("error in painintg cannonball");
     }
 }
 

@@ -4,6 +4,7 @@
 #include "cannonball.h"
 #include "projectiles.h"
 #include "stdio.h"
+#include "bunker.h"
 
 TaskHandle_t ProjectileTask;
 
@@ -20,6 +21,10 @@ void vHandleProjectiles(void *pvParameters){
 
     for(;;){
         xMoveCannonballs();
+
+        if(hitBunker(CannonBalls[0].x_coord, CannonBalls[0].y_coord, CANNONBALL_WIDTH, CANNONBALL_HEIGHT)){
+            CannonBalls[0].exists = false;
+        }
 
         if(time_to_reload > 0){
             time_to_reload--;
