@@ -1,5 +1,6 @@
 #include "invaders.h"
 #include "TUM_Draw.h"
+#include "stdio.h"
 
 
 TaskHandle_t InvaderTask;
@@ -16,13 +17,14 @@ void vHandleInvaders(void *pvParameters){
         }else{
             show_bmp1=true;
         }
-        move_invaders_right();
+        move_invaders();
         vTaskDelay((TickType_t) 1000);
     }
 }
 
 void invaderInit(){
     show_bmp1 = true;
+    movement = 0;
 
     invaderTypes[INVADER_TYPE_A].points = 10;
     invaderTypes[INVADER_TYPE_A].bmp1 = tumDrawLoadImage("../resources/img/invaderA1.bmp");
@@ -92,6 +94,7 @@ void move_invaders_right(){
             Invaders[r][c].x+=INVADER_SIDE_STEP;
         }
     }
+    shiftRight += INVADER_SIDE_STEP;
 }
 
 void move_invaders_left(){
@@ -100,18 +103,41 @@ void move_invaders_left(){
             Invaders[r][c].x-=INVADER_SIDE_STEP;
         }
     }
+    shiftRight -= INVADER_SIDE_STEP;
 }
 
 void move_invaders_down(){
+    if(shiftDown >= INVADER_MAX_SHIFT_DOWN){
+        // Game OVer
+        printf("Game Over");
+    }
     for(int r=0; r<NUM_INVADER_ROWS; r++){
         for(int c=0; c<NUM_INVADER_COLUMNS; c++){
-            Invaders[r][c].y+=INVADER_SIDE_STEP;
+            Invaders[r][c].y+=INVADER_DOWN_STEP;
         }
     }
+    shiftDown += INVADER_DOWN_STEP;
 }
 
+#define MOVING_RIGHT 0
+#define MOVING_LEFT 1
+
 void move_invaders(){
-    
+    if(movement==MOVING_LEFT){
+        if(shiftRight-INVADER_SIDE_STEP > 0){
+            move_invaders_left();
+        }else{
+            move_invaders_down();
+            movement = MOVING_RIGHT;
+        }
+    }else if(movement==MOVING_RIGHT){
+        if(shiftRight+INVADER_SIDE_STEP < INVADER_MAX_SHIFT_RIGHT){
+            move_invaders_right();
+        }else{
+            move_invaders_down();
+            movement = MOVING_LEFT;
+        }
+    }
 }
 
 

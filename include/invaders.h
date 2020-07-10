@@ -15,9 +15,8 @@
 #define INVADER_HEIGHT 35
 #define INVADER_SPACE_HORIZONTAL 10
 #define INVADER_SPACE_VERTICAL 10
-#define INVADER_SPACE_LEFT 20
-#define INVADER_SPACE_RIGHT 20
-#define INVADER_SPACE_TOP 20
+#define INVADER_SPACE_LEFT 5
+#define INVADER_SPACE_TOP 10
 
 #define INVADER_TYPE_A 0
 #define INVADER_TYPE_B 1
@@ -25,6 +24,9 @@
 
 #define INVADER_SIDE_STEP 20
 #define INVADER_DOWN_STEP 20
+
+#define INVADER_MAX_SHIFT_DOWN 100
+#define INVADER_MAX_SHIFT_RIGHT 150
 
 extern TaskHandle_t InvaderTask;
 
@@ -42,6 +44,11 @@ typedef struct {
 invadertype_t invaderTypes[3];
 
 bool show_bmp1;
+int shiftRight;
+int shiftDown;
+#define MOVING_RIGHT 0
+#define MOVING_LEFT 1
+bool movement;
 
 
 typedef struct {
@@ -56,6 +63,6 @@ invader_t Invaders[NUM_INVADER_ROWS][NUM_INVADER_COLUMNS];
 
 
 void paint_invaders();
-void move_invaders_right();
+void move_invaders();
 
 #endif /* INVADERS_H */
