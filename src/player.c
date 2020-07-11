@@ -3,18 +3,22 @@
 #include <stdio.h>
 #include "cannonball.h"
 
-
+void playerInit(){
+    Player.img = tumDrawLoadScaledImage("../resources/img/player.bmp", 1);
+}
 
 
 void paint_player(){
     
     //draw Player Base
-    tumDrawFilledBox(Player.x_coord, PLAYER_Y_COORD, PLAYER_WIDTH, PLAYER_BODY_HEIGTH, Green);
+    //tumDrawFilledBox(Player.x_coord, PLAYER_Y_COORD, PLAYER_WIDTH, PLAYER_BODY_HEIGTH, Green);
 
     //draw Cannon
     int x_coord = Player.x_coord + (int)((1.0/2.0) * (PLAYER_WIDTH - PLAYER_CANNON_WIDTH));
     int y_coord = PLAYER_Y_COORD - PLAYER_CANNON_HEIGTH;
-    tumDrawFilledBox(x_coord, y_coord, PLAYER_CANNON_WIDTH, PLAYER_CANNON_HEIGTH, Green);
+    //tumDrawFilledBox(x_coord, y_coord, PLAYER_CANNON_WIDTH, PLAYER_CANNON_HEIGTH, Green);
+    
+    tumDrawLoadedImage(Player.img, x_coord, y_coord);
 }
 
 void player_move_right(){

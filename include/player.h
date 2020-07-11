@@ -75,6 +75,7 @@ typedef struct {
     unsigned int Life;
     unsigned int Points;
     unsigned int x_coord;
+    void * img;
 } player_t;
 
 player_t Player;
@@ -109,6 +110,8 @@ void xPlayerMoveLeft();
 void xPlayerShoot();
 void player_shoot();
 void player_reduce_life();
+
+void playerInit();
 
 
 #endif /* PLAYER_H */
