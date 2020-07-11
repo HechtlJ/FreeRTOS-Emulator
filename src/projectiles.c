@@ -26,7 +26,10 @@ void vHandleProjectiles(void *pvParameters){
 
 
         if(CannonBalls[0].exists){
-            if(hitBunker(CannonBalls[0].x_coord, CannonBalls[0].y_coord, CANNONBALL_WIDTH, CANNONBALL_HEIGHT)){
+            /*if(hitBunker(CannonBalls[0].x_coord, CannonBalls[0].y_coord, CANNONBALL_WIDTH, CANNONBALL_HEIGHT)){
+                CannonBalls[0].exists = false;
+            }*/
+            if(checkBunkerHit(CannonBalls[0].x_coord, CannonBalls[0].y_coord, true, 0)){
                 CannonBalls[0].exists = false;
             }
             if(invaders_check_hit(CannonBalls[0].x_coord, CannonBalls[0].y_coord, CANNONBALL_WIDTH, CANNONBALL_HEIGHT)){

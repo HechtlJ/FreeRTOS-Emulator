@@ -32,9 +32,9 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 
-#define CANNONBALL_VELOCITY 10
-#define CANNONBALL_WIDTH 5
-#define CANNONBALL_HEIGHT 15
+#define CANNONBALL_VELOCITY 14
+#define CANNONBALL_WIDTH 3
+#define CANNONBALL_HEIGHT 12
 #define MAX_NUM_CANNONBALLS 1
 #define RELOAD_TIME 20
 
