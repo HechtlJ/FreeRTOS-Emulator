@@ -132,6 +132,7 @@ int main(int argc, char *argv[])
     }*/
 
     Player.x_coord = 200;
+    Player.Points=0;
     PlayerHandle = xSemaphoreCreateMutex();
     CannonballHandle = xSemaphoreCreateMutex();
     BunkerHandle = xSemaphoreCreateMutex();

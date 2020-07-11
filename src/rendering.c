@@ -5,8 +5,26 @@
 #include "cannonball.h"
 #include "bunker.h"
 #include "invaders.h"
+#include "stdlib.h"
 
 TaskHandle_t RenderingTask;
+
+
+#define UI_HEIGHT 40
+
+void paintUI(){
+    tumDrawLine(0, SCREEN_HEIGHT-UI_HEIGHT, SCREEN_WIDTH-1, 
+        SCREEN_HEIGHT-UI_HEIGHT, 2, White);
+
+    int y = SCREEN_HEIGHT-UI_HEIGHT + 5;
+    char text[12];
+    sprintf(text, "%d", Player.Points);
+    tumDrawText(text, 5, y, White);
+}
+
+void xPaintUI(){
+
+}
 
 void vRender(void *pvParameters){
     //player_t player;
@@ -26,6 +44,8 @@ void vRender(void *pvParameters){
         xPaintBunkers();
 
         paint_invaders();
+
+        paintUI();
         
         tumDrawUpdateScreen(); // Refresh the screen to draw string
 

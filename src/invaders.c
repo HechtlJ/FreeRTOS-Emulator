@@ -2,6 +2,9 @@
 #include "TUM_Draw.h"
 #include "stdio.h"
 
+//TODO: switch to queue for points
+#include "player.h"
+
 
 TaskHandle_t InvaderTask;
 
@@ -152,6 +155,7 @@ int invaders_check_hit(int x, int y, int w, int h){
                 if(Invaders[r][c].x <= min_x && (Invaders[r][c].x+INVADER_WIDTH) >= max_x){
                     if(Invaders[r][c].alive){
                         Invaders[r][c].alive = false;
+                        Player.Points += Invaders[r][c].type->points;
                         return 1; //Hit
                     }
                 }

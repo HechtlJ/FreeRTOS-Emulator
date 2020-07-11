@@ -73,6 +73,7 @@
  */
 typedef struct {
     unsigned int Life;
+    unsigned int Points;
     unsigned int x_coord;
 } player_t;
 
