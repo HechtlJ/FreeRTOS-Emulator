@@ -30,16 +30,16 @@ void invaderInit(){
     movement = 0;
 
     invaderTypes[INVADER_TYPE_A].points = 10;
-    invaderTypes[INVADER_TYPE_A].bmp1 = tumDrawLoadImage("../resources/img/invaderA1.bmp");
-    invaderTypes[INVADER_TYPE_A].bmp2 = tumDrawLoadImage("../resources/img/invaderA2.bmp");
+    invaderTypes[INVADER_TYPE_A].bmp1 = tumDrawLoadScaledImage("../resources/img/invaderA1.bmp", 0.66);
+    invaderTypes[INVADER_TYPE_A].bmp2 = tumDrawLoadScaledImage("../resources/img/invaderA2.bmp", 0.66);
 
     invaderTypes[INVADER_TYPE_B].points = 20;
-    invaderTypes[INVADER_TYPE_B].bmp1 = tumDrawLoadImage("../resources/img/invaderB1.bmp");
-    invaderTypes[INVADER_TYPE_B].bmp2 = tumDrawLoadImage("../resources/img/invaderB2.bmp");
+    invaderTypes[INVADER_TYPE_B].bmp1 = tumDrawLoadScaledImage("../resources/img/invaderB1.bmp", 0.66);
+    invaderTypes[INVADER_TYPE_B].bmp2 = tumDrawLoadScaledImage("../resources/img/invaderB2.bmp", 0.66);
 
     invaderTypes[INVADER_TYPE_C].points = 40;
-    invaderTypes[INVADER_TYPE_C].bmp1 = tumDrawLoadImage("../resources/img/invaderC1.bmp");
-    invaderTypes[INVADER_TYPE_C].bmp2 = tumDrawLoadImage("../resources/img/invaderC2.bmp");
+    invaderTypes[INVADER_TYPE_C].bmp1 = tumDrawLoadScaledImage("../resources/img/invaderC1.bmp", 0.66);
+    invaderTypes[INVADER_TYPE_C].bmp2 = tumDrawLoadScaledImage("../resources/img/invaderC2.bmp", 0.66);
 
 
 
