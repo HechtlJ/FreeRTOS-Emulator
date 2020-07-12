@@ -7,6 +7,7 @@
 #include "bunker.h"
 #include "invaders.h"
 #include "missile.h"
+#include "level.h"
 
 TaskHandle_t ProjectileTask;
 
@@ -35,16 +36,22 @@ void vHandleProjectiles(void *pvParameters){
         //TODO: One or multiple cannonballs?
 
 
-        if(CannonBalls[0].exists){
+
+        for(int i=0; i<MAX_NUM_CANNONBALLS; i++){
+            if(CannonBalls[i].exists){
             /*if(hitBunker(CannonBalls[0].x_coord, CannonBalls[0].y_coord, CANNONBALL_WIDTH, CANNONBALL_HEIGHT)){
                 CannonBalls[0].exists = false;
             }*/
-            if(checkBunkerHit(CannonBalls[0].x_coord, CannonBalls[0].y_coord, true, 0)){
-                CannonBalls[0].exists = false;
+            if(checkBunkerHit(CannonBalls[i].x_coord, CannonBalls[i].y_coord, true, 0)){
+                CannonBalls[i].exists = false;
             }
-            if(invaders_check_hit(CannonBalls[0].x_coord, CannonBalls[0].y_coord, CANNONBALL_WIDTH, CANNONBALL_HEIGHT)){
-                CannonBalls[0].exists = false;
+            if(invaders_check_hit(CannonBalls[i].x_coord, CannonBalls[i].y_coord, CANNONBALL_WIDTH, CANNONBALL_HEIGHT)){
+                CannonBalls[i].exists = false;
+                if(invaders_all_dead()){
+                    next_level();
+                }
             }
+        }
         }
 
         if(time_to_reload > 0){

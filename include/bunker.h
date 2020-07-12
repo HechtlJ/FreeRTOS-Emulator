@@ -8,8 +8,8 @@
 #include "TUM_Draw.h"
 
 #define NUM_BUNKERS 4
-#define BUNKER_WIDTH 80
-#define BUNKER_RIM 30
+#define BUNKER_WIDTH 30
+#define BUNKER_RIM 60
 #define BUNKER_Y_COORD 485
 
 #define BUNKER_HEIGHT 30

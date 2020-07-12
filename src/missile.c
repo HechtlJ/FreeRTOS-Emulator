@@ -58,7 +58,6 @@ void xMissilesSwitchAnimation(){
 
 
 int create_missile(int x, int y, char type){
-    printf("created missile");
     for(int i=0; i<NUM_MAX_MISSILES; i++){
         if(!Missiles[i].exists){
             Missiles[i].x_coord = x;

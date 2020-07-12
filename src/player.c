@@ -9,16 +9,7 @@ void playerInit(){
 
 
 void paint_player(){
-    
-    //draw Player Base
-    //tumDrawFilledBox(Player.x_coord, PLAYER_Y_COORD, PLAYER_WIDTH, PLAYER_BODY_HEIGTH, Green);
-
-    //draw Cannon
-    int x_coord = Player.x_coord + (int)((1.0/2.0) * (PLAYER_WIDTH - PLAYER_CANNON_WIDTH));
-    int y_coord = PLAYER_Y_COORD - PLAYER_CANNON_HEIGTH;
-    //tumDrawFilledBox(x_coord, y_coord, PLAYER_CANNON_WIDTH, PLAYER_CANNON_HEIGTH, Green);
-    
-    tumDrawLoadedImage(Player.img, x_coord, y_coord);
+    tumDrawLoadedImage(Player.img, Player.x_coord, PLAYER_Y_COORD);
 }
 
 void player_move_right(){
@@ -36,8 +27,8 @@ void player_move_left(){
 }
 
 void player_shoot(){
-    int x = Player.x_coord + (0.5*PLAYER_WIDTH) - (0.5*CANNONBALL_WIDTH);
-    int y = PLAYER_Y_COORD - PLAYER_CANNON_HEIGTH;
+    int x = Player.x_coord + 0.5*PLAYER_WIDTH - 0.5 * CANNONBALL_WIDTH ;
+    int y = PLAYER_Y_COORD;
     create_cannonball(x, y);
 }
 

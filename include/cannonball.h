@@ -43,7 +43,7 @@
 #define CANNONBALL_WIDTH 3
 #define CANNONBALL_HEIGHT 12
 #define MAX_NUM_CANNONBALLS 1
-#define RELOAD_TIME 20
+#define RELOAD_TIME 2
 
 typedef struct {
     int x_coord;

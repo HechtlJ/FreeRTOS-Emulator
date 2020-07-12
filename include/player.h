@@ -57,12 +57,10 @@
  * The amount of pixels the player will move per call of one of the player move functions.
  */
 #define PLAYER_Y_COORD 560
-#define PLAYER_WIDTH 60
-#define PLAYER_BODY_HEIGTH 25
-#define PLAYER_CANNON_WIDTH 8
-#define PLAYER_CANNON_HEIGTH 20
-#define PLAYER_MAX_X SCREEN_WIDTH - 10 - PLAYER_WIDTH
-#define PLAYER_MIN_X 10
+#define PLAYER_WIDTH 39
+#define PLAYER_HEIGTH 25
+#define PLAYER_MAX_X SCREEN_WIDTH - PLAYER_WIDTH
+#define PLAYER_MIN_X 0
 #define PLAYER_SPEED 5
 
 /**
@@ -72,9 +70,9 @@
  * 
  */
 typedef struct {
-    unsigned int Life;
-    unsigned int Points;
-    unsigned int x_coord;
+    int Life;
+    int Points;
+    int x_coord;
     void * img;
 } player_t;
 

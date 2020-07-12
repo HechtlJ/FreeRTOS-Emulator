@@ -8,7 +8,9 @@
 #include "projectiles.h"
 #include "stdlib.h"
 #include "missile.h"
-
+#include "level.h"
+#include "stdio.h"
+#include "TUM_Font.h"
 
 TaskHandle_t RenderingTask;
 
@@ -23,6 +25,12 @@ void paintUI(){
     char text[12];
     sprintf(text, "%d", Player.Points);
     tumDrawText(text, 5, y, White);
+    sprintf(text, "Level: %d", (int)uxSemaphoreGetCount(Level));
+    tumDrawText(text, 350, y, White);
+
+
+    tumDrawText("SCORE:   ", 5, 5, White);
+    tumDrawText("HI_SCORE: ", 300, 5, White);
 }
 
 void xPaintUI(){
@@ -38,7 +46,8 @@ void vRender(void *pvParameters){
     // the drawing functions to draw objects. This is a limitation of the SDL
     // backend.
     tumDrawBindThread();
-
+    tumFontLoadFont("IBMPlexSans-SemiBold.ttf", 18);
+    tumFontSelectFontFromName("IBMPlexSans-SemiBold.ttf");
 
     for(;;){
         tumDrawClear(Black); // Clear screen
@@ -49,6 +58,7 @@ void vRender(void *pvParameters){
         paint_invaders();
 
         paintUI();
+        xPaintPlayer();
 
         //paintMissileTypeA(50, 50, 3);
         xPaintMissiles();
