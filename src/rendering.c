@@ -49,25 +49,74 @@ void vRender(void *pvParameters){
     tumFontLoadFont("IBMPlexSans-SemiBold.ttf", 18);
     tumFontSelectFontFromName("IBMPlexSans-SemiBold.ttf");
 
+    
+
     for(;;){
+        /*
+        if(State==STATE_MENU){
+            drawMenuScreen();
+        }else if(State==STATE_HIGHSCORE){
+            drawHighscoreScreen();
+        }*/
+
+        if(State==STATE_PLAYING){
+            tumDrawClear(Black); // Clear screen
+            xPaintPlayer();
+            xPaintCannonballs();
+            xPaintBunkers();
+
+            paint_invaders();
+
+            paintUI();
+            xPaintPlayer();
+
+            //paintMissileTypeA(50, 50, 3);
+            xPaintMissiles();
+        }
         tumDrawClear(Black); // Clear screen
-        xPaintPlayer();
-        xPaintCannonballs();
-        xPaintBunkers();
+        tumFontSetSize(32);
+        drawButtons();
 
-        paint_invaders();
-
-        paintUI();
-        xPaintPlayer();
-
-        //paintMissileTypeA(50, 50, 3);
-        xPaintMissiles();
         tumDrawUpdateScreen(); // Refresh the screen to draw string
 
 
         vTaskDelay((TickType_t)RENDERDELAY);
     }
 
+}
+/*
+void drawButton(char * txt, int button_y){
+    tumFontSetSize(32);
+    
+    int button_x = (SCREEN_WIDTH - BUTTON_WIDTH)/2;
+    tumDrawFilledBox(button_x, button_y, BUTTON_WIDTH, BUTTON_HEIGHT, White);
+
+    int txt_width;
+    int txt_height;
+    tumGetTextSize(txt, &txt_width, &txt_height);
+    int txt_x = (SCREEN_WIDTH - txt_width)/2;
+    int txt_y = button_y + (BUTTON_HEIGHT-txt_height)/2;
+    tumDrawText(txt, txt_x, txt_y, Black);
+}*/
+
+void drawButton(button_t * button){
+    tumFontSetSize(32);
+    
+    int button_x = (SCREEN_WIDTH - BUTTON_WIDTH)/2;
+    tumDrawFilledBox(button_x, button->y_coord, BUTTON_WIDTH, BUTTON_HEIGHT, White);
+
+    int txt_width;
+    int txt_height;
+    tumGetTextSize(button->txt, &txt_width, &txt_height);
+    int txt_x = (SCREEN_WIDTH - txt_width)/2;
+    int txt_y = button->y_coord + (BUTTON_HEIGHT-txt_height)/2;
+    tumDrawText(button->txt, txt_x, txt_y, Black);
+
+    if(button->hover){
+        tumDrawBox(button_x + 4, button->y_coord + 4, BUTTON_WIDTH - 7, BUTTON_HEIGHT - 7, Black);
+        tumDrawBox(button_x + 3, button->y_coord + 3, BUTTON_WIDTH - 5, BUTTON_HEIGHT - 5, Black);
+        tumDrawBox(button_x + 2, button->y_coord + 2, BUTTON_WIDTH - 3, BUTTON_HEIGHT - 3, Black);
+    }
 }
 
 
@@ -80,8 +129,17 @@ void renderInit(void)
          goto err_rendertask;
     }
 
+
     return;
 
     err_rendertask:
         tumDrawExit();
+}
+
+void drawButtons(){
+    state_t * state = &States[State];
+
+    for(int i=0; i< state->num_buttons; i++){
+        drawButton(&state->Buttons[i]);
+    }
 }

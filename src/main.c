@@ -140,6 +140,7 @@ int main(int argc, char *argv[])
     init_bunkers();
     init_missiles();
     init_levels();
+    initStates();
 
     
     

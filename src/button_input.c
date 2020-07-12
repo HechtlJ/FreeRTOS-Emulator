@@ -4,6 +4,10 @@
 #include <SDL2/SDL_scancode.h>
 #include "player.h"
 #include "projectiles.h"
+#include "rendering.h"
+#include "TUM_Draw.h"
+#include "stdio.h"
+#include "level.h"
 
 TaskHandle_t ButtonTask;
 
@@ -27,6 +31,34 @@ void xGetButtonInput(void)
 }
 
 
+
+void handleButton(button_t * button){
+    int mouse_x = tumEventGetMouseX();
+    int mouse_y = tumEventGetMouseY();
+    int min_x = (SCREEN_WIDTH - BUTTON_WIDTH)/2;
+    int max_x = (SCREEN_WIDTH + BUTTON_WIDTH)/2;
+
+    if(mouse_x < min_x || mouse_x > max_x){
+        button->hover = false;
+        return; 
+    }
+    if(button->active){
+        int min_y = button->y_coord;
+        int max_y = button->y_coord + BUTTON_HEIGHT;
+        if(mouse_y >= min_y && mouse_y <= max_y){
+            // hit
+            if(tumEventGetMouseLeft()){
+                button->hover = false;
+                button->action();
+            }else{
+                button->hover = true;
+            }
+        }else{
+            button->hover = false;
+        }
+    }
+
+}
 
 void vHandleButtons(void *pvParameters){
 
@@ -52,11 +84,14 @@ void vHandleButtons(void *pvParameters){
                     /* Failed to post the message, even after 10 ticks. */
                 }
             }
+            state_t * state = &States[State];
+            for(int i=0; i<state->num_buttons; i++){
+                handleButton(&state->Buttons[i]);
+            }
             xSemaphoreGive(buttons.lock);
         }
         vTaskDelay((TickType_t) (1000/30));
     }
-
 }
 
 void buttonInit(){
@@ -73,3 +108,4 @@ void buttonInit(){
         //PRINT_ERROR("Failed to create buttons lock");
     }
 }
+
