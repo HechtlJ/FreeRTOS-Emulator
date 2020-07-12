@@ -19,8 +19,17 @@ void playerShoot(int * time_to_reload){
 void vHandleProjectiles(void *pvParameters){
     unsigned int msg;
     int time_to_reload=0;
+    int animationTimer = ANIMATION_DURATION;
 
     for(;;){
+        animationTimer--;
+        if(animationTimer==0){
+            missilesSwitchAnimation();
+            animationTimer=ANIMATION_DURATION;
+        }
+        moveMissiles();
+        
+
         xMoveCannonballs();
         //TODO: One or multiple cannonballs?
 
@@ -68,4 +77,79 @@ void projectileInit(){
         // error handling
     }
 
+    for(int i=0; i<NUM_MAX_MISSILES; i++){
+        Missiles[i].exists = false;
+    }
+
+    Missiles[0].exists=true;
+    Missiles[0].x_coord = 50;
+    Missiles[0].y_coord = 50;
+    Missiles[0].animation = 0;
+    Missiles[0].type = MISSILE_TYPE_A;
+
+}
+
+
+
+void paintMissile(missile_t * missile){
+    if(!missile->exists)
+        return;
+    switch (missile->type){
+    case MISSILE_TYPE_A:
+            paintMissileTypeA(missile->x_coord, missile->y_coord, missile->animation);
+            break;
+    
+    default:
+        break;
+    }
+}
+
+
+void paintMissileTypeA(int x, int y, char animation){
+    if(animation==0){
+        tumDrawFilledBox(x+2, y, 1, MISSILE_HEIGHT-1, White);
+    }else if(animation==1){
+        tumDrawFilledBox(x+2, y, 1, MISSILE_HEIGHT-1, White);
+        tumDrawFilledBox(x, y+12, MISSILE_WIDTH-1, 1, White);
+    }else if(animation==2){
+        tumDrawFilledBox(x+2, y, 1, MISSILE_HEIGHT-1, White);
+        tumDrawFilledBox(x, y+6, MISSILE_WIDTH-1, 1, White);
+    }else if(animation==3){
+        tumDrawFilledBox(x+2, y, 1, MISSILE_HEIGHT-1, White);
+        tumDrawFilledBox(x, y, MISSILE_WIDTH-1, 1, White);
+    }else{
+        //error
+        return;
+    }
+}
+
+void missilesSwitchAnimation(){
+    for(int i=0; i<NUM_MAX_MISSILES; i++){
+        Missiles[i].animation++;
+        Missiles[i].animation = Missiles[i].animation % 4;
+    }
+}
+
+void moveMissiles(){
+    int speed;
+    for(int i=0; i<NUM_MAX_MISSILES; i++){
+        if(Missiles[i].exists){
+            switch(Missiles[i].type){
+                case MISSILE_TYPE_A: speed = MISSILE_TYPE_A_SPEED; break;
+                case MISSILE_TYPE_B: speed = MISSILE_TYPE_B_SPEED; break;
+                case MISSILE_TYPE_C: speed = MISSILE_TYPE_C_SPEED; break;
+                default: break;
+            }
+            Missiles[i].y_coord += speed;
+            if(Missiles[i].y_coord > MISSILE_MAX_Y){
+                Missiles[i].exists = false;
+            }
+        }
+    }
+}
+
+void paintMissiles(){
+    for(int i=0; i<NUM_MAX_MISSILES; i++){
+        paintMissile(&Missiles[i]);
+    }
 }

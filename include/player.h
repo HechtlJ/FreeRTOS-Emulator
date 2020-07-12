@@ -56,7 +56,7 @@
  * @def PLAYER_SPEED
  * The amount of pixels the player will move per call of one of the player move functions.
  */
-#define PLAYER_Y_COORD 400
+#define PLAYER_Y_COORD 560
 #define PLAYER_WIDTH 60
 #define PLAYER_BODY_HEIGTH 25
 #define PLAYER_CANNON_WIDTH 8

@@ -22,6 +22,13 @@
  */
 
 
+/**
+ * @defgroup cannonball SI Cannonball API
+ * 
+ * Functions to generate a Cannonball for Space Invaders and handle his actions and stats.
+ * 
+ * @{
+ */
 
 
 #ifndef CANNONBALL_H
