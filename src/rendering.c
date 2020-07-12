@@ -7,6 +7,7 @@
 #include "invaders.h"
 #include "projectiles.h"
 #include "stdlib.h"
+#include "missile.h"
 
 
 TaskHandle_t RenderingTask;
@@ -50,7 +51,7 @@ void vRender(void *pvParameters){
         paintUI();
 
         //paintMissileTypeA(50, 50, 3);
-        paintMissiles();
+        xPaintMissiles();
         tumDrawUpdateScreen(); // Refresh the screen to draw string
 
 

@@ -27,6 +27,7 @@
 #include "projectiles.h"
 #include "bunker.h"
 #include "invaders.h"
+#include "missile.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -96,11 +97,6 @@ void vDemoTask(void *pvParameters)
 
 int main(int argc, char *argv[])
 {
-    if(strcmp(argv, "debug")){
-        printf("Debug Mode\n");
-    }else{
-        printf("Normal Mode\n");
-    }
     char *bin_folder_path = tumUtilGetBinFolderPath(argv[0]);
 
     printf("Initializing: ");
@@ -137,10 +133,12 @@ int main(int argc, char *argv[])
     PlayerHandle = xSemaphoreCreateMutex();
     CannonballHandle = xSemaphoreCreateMutex();
     BunkerHandle = xSemaphoreCreateMutex();
+    MissileHandle = xSemaphoreCreateMutex();
     
     init_cannonballs();
     init_bunkers();
-
+    init_missiles();
+    
     invaderInit();
 
     renderInit();
