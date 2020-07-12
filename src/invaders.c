@@ -172,16 +172,17 @@ int invaders_check_hit(int x, int y, int w, int h){
 }
 
 void invader_shoot(){
-    int random;
-    
     srand (time(NULL));
+    int column = rand() % NUM_INVADER_COLUMNS + 1;
+    char type = rand() % 4;  // There are 3 types
 
-    random = rand() % NUM_INVADER_COLUMNS + 1;
+    int x_offset = INVADER_WIDTH/2 -1;
+    int y_offset = INVADER_HEIGHT;
 
     for(int i=NUM_INVADER_ROWS; i>=0; i--){
-        invader_t * invader = &Invaders[i][random];
+        invader_t * invader = &Invaders[i][column];
         if(invader->alive){
-            xCreateMissile(invader->x, invader->y, MISSILE_TYPE_A);
+            xCreateMissile(invader->x + x_offset, invader->y + y_offset, type);
             return;
         }
     }

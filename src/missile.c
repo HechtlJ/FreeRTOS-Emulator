@@ -7,8 +7,6 @@ void init_missiles(){
     for(int i=0; i<NUM_MAX_MISSILES; i++){
         Missiles[i].exists = false;
     }
-
-    xCreateMissile(50, 50, MISSILE_TYPE_B);
 }
 
 
