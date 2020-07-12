@@ -22,11 +22,16 @@
 #define INVADER_TYPE_B 1
 #define INVADER_TYPE_C 2
 
-#define INVADER_SIDE_STEP 20
+#define INVADER_SIDE_STEP 6
 #define INVADER_DOWN_STEP 20
 
 #define INVADER_MAX_SHIFT_DOWN 100
-#define INVADER_MAX_SHIFT_RIGHT 150
+#define INVADER_MAX_SHIFT_RIGHT 50
+
+#define INVADER_START_DELAY 1000
+#define INVADER_DELAY_DECREASE INVADER_START_DELAY / (NUM_INVADER_ROWS * NUM_INVADER_COLUMNS + 1)
+
+
 
 extern TaskHandle_t InvaderTask;
 
@@ -51,6 +56,9 @@ int shiftDown;
 bool movement;
 
 
+int invaderDelay;
+
+
 typedef struct {
     invadertype_t * type;
     int x;
@@ -65,5 +73,7 @@ invader_t Invaders[NUM_INVADER_ROWS][NUM_INVADER_COLUMNS];
 void paint_invaders();
 void move_invaders();
 int invaders_check_hit(int x, int y, int w, int h);
+
+void invader_shoot();
 
 #endif /* INVADERS_H */

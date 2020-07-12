@@ -1,6 +1,9 @@
 #include "invaders.h"
 #include "TUM_Draw.h"
 #include "stdio.h"
+#include "missile.h"
+#include "stdlib.h"
+#include "time.h"
 
 //TODO: switch to queue for points
 #include "player.h"
@@ -21,11 +24,13 @@ void vHandleInvaders(void *pvParameters){
             show_bmp1=true;
         }
         move_invaders();
-        vTaskDelay((TickType_t) 1000);
+        invader_shoot();
+        vTaskDelay((TickType_t) invaderDelay);
     }
 }
 
 void invaderInit(){
+    invaderDelay = INVADER_START_DELAY;
     show_bmp1 = true;
     movement = 0;
 
@@ -156,6 +161,7 @@ int invaders_check_hit(int x, int y, int w, int h){
                     if(Invaders[r][c].alive){
                         Invaders[r][c].alive = false;
                         Player.Points += Invaders[r][c].type->points;
+                        invaderDelay -= INVADER_DELAY_DECREASE;
                         return 1; //Hit
                     }
                 }
@@ -163,6 +169,22 @@ int invaders_check_hit(int x, int y, int w, int h){
         }
     }
     return 0;
+}
+
+void invader_shoot(){
+    int random;
+    
+    srand (time(NULL));
+
+    random = rand() % NUM_INVADER_COLUMNS + 1;
+
+    for(int i=NUM_INVADER_ROWS; i>=0; i--){
+        invader_t * invader = &Invaders[i][random];
+        if(invader->alive){
+            xCreateMissile(invader->x, invader->y, MISSILE_TYPE_A);
+            return;
+        }
+    }
 }
 
 
