@@ -93,6 +93,9 @@ void vHandleButtons(void *pvParameters){
                     /* Failed to post the message, even after 10 ticks. */
                 }
             }
+            if(buttons.buttons[KEYCODE(P)]){
+                switchToPause();
+            }
             state_t * state = &States[State];
             for(int i=0; i<state->num_buttons; i++){
                 handleButton(&state->Buttons[i]);

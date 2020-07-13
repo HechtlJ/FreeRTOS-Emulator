@@ -53,7 +53,7 @@ void vRender(void *pvParameters){
 
     for(;;){
         state_t * state = &States[State];
-        
+
         state->paintFunc();
         tumDrawUpdateScreen(); // Refresh the screen to draw string
 
@@ -80,7 +80,7 @@ void drawButton(button_t * button){
     tumFontSetSize(32);
     
     int button_x = (SCREEN_WIDTH - BUTTON_WIDTH)/2;
-    tumDrawFilledBox(button_x, button->y_coord, BUTTON_WIDTH, BUTTON_HEIGHT, White);
+    tumDrawFilledBox(button_x, button->y_coord, BUTTON_WIDTH, BUTTON_HEIGHT, Red);
 
     int txt_width;
     int txt_height;
@@ -141,6 +141,7 @@ void drawSingleplayerScreen(){
 
     //paintMissileTypeA(50, 50, 3);
     xPaintMissiles();
+    drawButtons();
 }
 
 
@@ -149,3 +150,8 @@ void drawHighscoreScreen(){
     tumDrawClear(Black); // Clear screen
     drawButtons();
 }
+
+void drawPauseScreen(){
+
+}
+

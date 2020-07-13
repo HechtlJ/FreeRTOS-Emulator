@@ -33,6 +33,7 @@ void initStates(){
     initMainMenu();
     initHighscore();
     initSingleplayer();
+    initPause();
 }
 
 void initMainMenu(){
@@ -88,6 +89,27 @@ void initSingleplayer(){
 }
 
 
+void initPause(){
+    state_t * state = &States[STATE_PAUSE];
+    state->num_buttons = 2;
+    state->Buttons = malloc(sizeof(button_t) * 2);
+
+    state->Buttons[0].txt = "Continue";
+    state->Buttons[0].y_coord = 150;
+    state->Buttons[0].active = false;
+    state->Buttons[0].hover = false;
+    state->Buttons[0].action = switchToSingleplayer;
+
+    state->Buttons[1].txt = "QUIT TO MENU";
+    state->Buttons[1].y_coord = 250;
+    state->Buttons[1].active = false;
+    state->Buttons[1].hover = false;
+    state->Buttons[1].action = switchToMainMenu;
+
+    state->paintFunc = drawSingleplayerScreen;
+}
+
+
 void switchToMainMenu(){
     disable_buttons(&States[State]);
     State = STATE_MAIN_MENU;
@@ -107,6 +129,15 @@ void switchToSingleplayer(){
     State = STATE_SINGLEPLAYER;
     enable_buttons(&States[State]);
     vTaskResume(InvaderTask);
+    vTaskResume(ProjectileTask);
+}
+
+void switchToPause(){
+    disable_buttons(&States[State]);
+    State = STATE_PAUSE;
+    enable_buttons(&States[State]);
+    vTaskSuspend(InvaderTask);
+    vTaskSuspend(ProjectileTask);
 }
 
 
@@ -117,6 +148,7 @@ void startSingleplayer(){
     //xResetBunkers;
     reset_bunkers();
     xResetMissiles();
+    invader_reset(0);
     // init_level???
 }
 

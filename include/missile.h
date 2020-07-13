@@ -70,10 +70,13 @@ void xMoveMissiles();
 void xMissilesSwitchAnimation();
 
 
+
 int create_missile(int x, int y, char type);
 void paint_missiles();
 void move_missiles();
 void missiles_switch_animation();
+int missile_check_bunker_hit();
+int missile_check_player_hit();
 
 
 void paint_missile_type_A(int x, int y, char animation);

@@ -41,6 +41,7 @@ void renderInit(void);
 void drawMenuScreen();
 void drawSingleplayerScreen();
 void drawHighscoreScreen();
+void drawPauseScreen();
 
 void drawButton(button_t * button);
 void drawButtons();

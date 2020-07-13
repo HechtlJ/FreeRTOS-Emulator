@@ -16,14 +16,14 @@
 #define INVADER_SPACE_HORIZONTAL 9
 #define INVADER_SPACE_VERTICAL 10
 #define INVADER_SPACE_LEFT 5
-#define INVADER_SPACE_TOP 160
+#define INVADER_SPACE_TOP 140
 
 #define INVADER_TYPE_A 0
 #define INVADER_TYPE_B 1
 #define INVADER_TYPE_C 2
 
 #define INVADER_SIDE_STEP 10
-#define INVADER_DOWN_STEP 20
+#define INVADER_DOWN_STEP 10
 
 #define INVADER_MAX_SHIFT_DOWN 100
 
@@ -77,5 +77,7 @@ int invaders_all_dead();
 
 void xInvaderReset(int offset);
 void invader_reset(int offset);
+
+int invaders_check_hit(int x, int y, int w, int h);
 
 #endif /* INVADERS_H */

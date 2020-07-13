@@ -39,19 +39,27 @@ void vHandleProjectiles(void *pvParameters){
 
         for(int i=0; i<MAX_NUM_CANNONBALLS; i++){
             if(CannonBalls[i].exists){
-            /*if(hitBunker(CannonBalls[0].x_coord, CannonBalls[0].y_coord, CANNONBALL_WIDTH, CANNONBALL_HEIGHT)){
+                /*if(hitBunker(CannonBalls[0].x_coord, CannonBalls[0].y_coord, CANNONBALL_WIDTH, CANNONBALL_HEIGHT)){
                 CannonBalls[0].exists = false;
-            }*/
-            if(checkBunkerHit(CannonBalls[i].x_coord, CannonBalls[i].y_coord, true, 0)){
-                CannonBalls[i].exists = false;
-            }
-            if(invaders_check_hit(CannonBalls[i].x_coord, CannonBalls[i].y_coord, CANNONBALL_WIDTH, CANNONBALL_HEIGHT)){
-                CannonBalls[i].exists = false;
-                if(invaders_all_dead()){
-                    next_level();
+                }*/
+                if(checkBunkerHit(CannonBalls[i].x_coord, CannonBalls[i].y_coord, true, DAMAGE_CANNONBALL)){
+                    CannonBalls[i].exists = false;
+                }
+                if(invaders_check_hit(CannonBalls[i].x_coord, CannonBalls[i].y_coord, CANNONBALL_WIDTH, CANNONBALL_HEIGHT)){
+                    CannonBalls[i].exists = false;
+                    if(invaders_all_dead()){
+                        next_level();
+                    }
                 }
             }
         }
+
+        for(int i=0; i<NUM_MAX_MISSILES; i++){
+            if(Missiles[i].exists){
+                if(checkBunkerHit(Missiles[i].x_coord+1, Missiles[i].y_coord, false, DAMAGE_MISSILE)){
+                    Missiles[i].exists = false;
+                }
+            }
         }
 
         if(time_to_reload > 0){
