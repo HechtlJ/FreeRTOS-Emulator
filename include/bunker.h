@@ -40,5 +40,10 @@ void damageBunker(int x, int y, int w, int h, int bunker);
 int checkBunkerHit(int x, int y, bool moving_up, int damage);
 
 
+void reset_bunkers();
+//TODO
+//void xResetBunkers();
+
+
 
 #endif /* BUNKER_H */

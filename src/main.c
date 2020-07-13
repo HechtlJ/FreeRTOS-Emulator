@@ -28,7 +28,7 @@
 #include "bunker.h"
 #include "invaders.h"
 #include "missile.h"
-#include "level.h"
+#include "game.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -128,8 +128,7 @@ int main(int argc, char *argv[])
         goto err_demotask;
     }*/
 
-    Player.x_coord = 200;
-    Player.Points=0;
+    
     playerInit();
     PlayerHandle = xSemaphoreCreateMutex();
     CannonballHandle = xSemaphoreCreateMutex();

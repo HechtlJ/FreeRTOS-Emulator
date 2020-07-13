@@ -45,9 +45,11 @@ void initStates();
 
 void initMainMenu();
 void initHighscore();
+void initSingleplayer();
 
 void switchToMainMenu();
 void switchToHighscore();
+void switchToSingleplayer();
 
 
 void enable_buttons(state_t * state);

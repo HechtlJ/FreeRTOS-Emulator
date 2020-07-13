@@ -6,8 +6,11 @@
 #include "bunker.h"
 #include "invaders.h"
 #include "missile.h"
-#include "level.h"
+#include "game.h"
 
+void test_func(){
+    printf("testfunc \n");
+}
 
 void init_levels(){
     Level = xSemaphoreCreateCounting(9999, 1);
@@ -29,6 +32,7 @@ void initStates(){
     State = STATE_MAIN_MENU;
     initMainMenu();
     initHighscore();
+    initSingleplayer();
 }
 
 void initMainMenu(){
@@ -39,12 +43,13 @@ void initMainMenu(){
     state->Buttons[0].txt = "SINGLEPLAYER";
     state->Buttons[0].y_coord = 100;
     state->Buttons[0].active = true;
-    //state->Buttons[0].action = startGame;
+    state->Buttons[0].action = switchToSingleplayer;
+    
 
     state->Buttons[1].txt = "MULTIPLAYER";
     state->Buttons[1].y_coord = 200;
     state->Buttons[1].active = true;
-    //state->Buttons[0].action
+    state->Buttons[1].action = test_func;
 
     state->Buttons[2].txt = "HIGHSCORES";
     state->Buttons[2].y_coord = 300;
@@ -54,7 +59,10 @@ void initMainMenu(){
     state->Buttons[3].txt = "CHEATS";
     state->Buttons[3].y_coord = 400;
     state->Buttons[3].active = true;
-    //state->Buttons[0].action
+    state->Buttons[3].action = test_func;
+
+
+    state->paintFunc = drawMenuScreen;
 
 }
 
@@ -69,6 +77,14 @@ void initHighscore(){
     state->Buttons[0].active = false;
     state->Buttons[0].hover = false;
     state->Buttons[0].action = switchToMainMenu;
+
+    state->paintFunc = drawHighscoreScreen;
+}
+
+void initSingleplayer(){
+    state_t * state = &States[STATE_SINGLEPLAYER];
+    state->num_buttons = 0;
+    state->paintFunc = drawSingleplayerScreen;
 }
 
 
@@ -83,6 +99,25 @@ void switchToHighscore(){
     disable_buttons(&States[State]);
     State = STATE_HIGHSCORE;
     enable_buttons(&States[State]);
+}
+
+
+void switchToSingleplayer(){
+    disable_buttons(&States[State]);
+    State = STATE_SINGLEPLAYER;
+    enable_buttons(&States[State]);
+    vTaskResume(InvaderTask);
+}
+
+
+void startSingleplayer(){
+    xResetPlayer();
+    xResetCannonballs;
+    //TODO
+    //xResetBunkers;
+    reset_bunkers();
+    xResetMissiles();
+    // init_level???
 }
 
 

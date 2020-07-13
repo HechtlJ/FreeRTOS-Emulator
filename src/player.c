@@ -70,3 +70,19 @@ void xPlayerShoot(){
         //do some error handling
     }
 }
+
+void xResetPlayer(){
+    if(xSemaphoreTake(PlayerHandle, NULL) == pdTRUE){
+            reset_player();
+            xSemaphoreGive(PlayerHandle);
+    }else{
+        //do some error handling
+    }
+}
+
+
+void reset_player(){
+    Player.x_coord = 200;
+    Player.Points = 0;
+    Player.Life = 2;
+}

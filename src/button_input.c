@@ -7,7 +7,7 @@
 #include "rendering.h"
 #include "TUM_Draw.h"
 #include "stdio.h"
-#include "level.h"
+#include "game.h"
 
 TaskHandle_t ButtonTask;
 
@@ -33,6 +33,9 @@ void xGetButtonInput(void)
 
 
 void handleButton(button_t * button){
+    if(mouseDebounce>0){
+        return;
+    }
     int mouse_x = tumEventGetMouseX();
     int mouse_y = tumEventGetMouseY();
     int min_x = (SCREEN_WIDTH - BUTTON_WIDTH)/2;
@@ -49,6 +52,7 @@ void handleButton(button_t * button){
             // hit
             if(tumEventGetMouseLeft()){
                 button->hover = false;
+                mouseDebounce = DEBOUNCE_LENGTH;
                 button->action();
             }else{
                 button->hover = true;
@@ -62,10 +66,15 @@ void handleButton(button_t * button){
 
 void vHandleButtons(void *pvParameters){
 
-
+    mouseDebounce=0;
     for(;;){
         tumEventFetchEvents(FETCH_EVENT_NONBLOCK | FETCH_EVENT_NO_GL_CHECK); // Query events backend for new events, ie. button presses
         xGetButtonInput(); // Update global input
+
+        
+        if(mouseDebounce>0){
+            mouseDebounce--;
+        }
 
         if (xSemaphoreTake(buttons.lock, 0) == pdTRUE) {
             if (buttons.buttons[KEYCODE(

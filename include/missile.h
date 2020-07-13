@@ -80,5 +80,8 @@ void paint_missile_type_A(int x, int y, char animation);
 void paint_missile_type_B(int x, int y, char animation);
 void paint_missile_type_C(int x, int y, char animation);
 
+void reset_missiles();
+void xResetMissiles();
+
 
 #endif /* MISSILE_H */

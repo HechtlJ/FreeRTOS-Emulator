@@ -35,6 +35,16 @@
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
 
+#define DEBOUNCE_LENGTH 5
+
+int mouseDebounce;
+/*
+typedef struct {
+    int keycode;
+
+}key_action_t;  */
+
+
 
 extern TaskHandle_t ButtonTask;
 

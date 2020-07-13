@@ -111,5 +111,8 @@ void player_reduce_life();
 
 void playerInit();
 
+void xResetPlayer();
+void reset_player();
+
 
 #endif /* PLAYER_H */

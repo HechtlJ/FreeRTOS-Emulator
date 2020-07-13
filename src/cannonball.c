@@ -69,3 +69,22 @@ void xMoveCannonballs(){
         printf("error in painintg player");
     }
 }
+
+
+void xResetCannonballs(){
+    if(xSemaphoreTake(CannonballHandle, ( TickType_t ) 10 ) == pdTRUE){
+            reset_cannonballs();
+            xSemaphoreGive(CannonballHandle);
+    }else{
+        //do some error handling
+        printf("error in painintg player");
+    }
+}
+
+void reset_cannonballs(){
+    for(int i=0; i<MAX_NUM_CANNONBALLS; i++){
+        CannonBalls[i].x_coord = 0;
+        CannonBalls[i].y_coord = 0;
+        CannonBalls[i].exists = false;
+    }
+}

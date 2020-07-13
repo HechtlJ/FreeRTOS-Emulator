@@ -115,3 +115,16 @@ int checkBunkerHit(int x, int y, bool moving_up, int damage){
     }
     return 0; // No Hit
 }
+
+
+void reset_bunkers(){
+    for(int x=0; x<NUM_BUNKER_BLOCK_X; x++){
+        for(int y=0; y<NUM_BUNKER_BLOCK_Y; y++){
+            //TODO: for schleife
+            Bunkers[0].BunkerBlocks[x][y] = true;
+            Bunkers[1].BunkerBlocks[x][y] = true;
+            Bunkers[2].BunkerBlocks[x][y] = true;
+            Bunkers[3].BunkerBlocks[x][y] = true;
+        }
+    }
+}

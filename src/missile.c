@@ -181,3 +181,20 @@ void paint_missile_type_C(int x, int y, char animation){
         return;
     }
 }
+
+
+void reset_missiles(){
+    for(int i=0; i<NUM_MAX_MISSILES; i++){
+        Missiles[i].exists = false;
+    }
+}
+
+void xResetMissiles(){
+    if (xSemaphoreTake(MissileHandle, (TickType_t)10) == pdTRUE) {
+		reset_missiles();
+		xSemaphoreGive(MissileHandle);
+	} else {
+		// error handling
+		return;
+	}
+}

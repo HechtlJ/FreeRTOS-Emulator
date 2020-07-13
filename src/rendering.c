@@ -8,7 +8,7 @@
 #include "projectiles.h"
 #include "stdlib.h"
 #include "missile.h"
-#include "level.h"
+#include "game.h"
 #include "stdio.h"
 #include "TUM_Font.h"
 
@@ -52,33 +52,10 @@ void vRender(void *pvParameters){
     
 
     for(;;){
-        /*
-        if(State==STATE_MENU){
-            drawMenuScreen();
-        }else if(State==STATE_HIGHSCORE){
-            drawHighscoreScreen();
-        }*/
-
-        if(State==STATE_PLAYING){
-            tumDrawClear(Black); // Clear screen
-            xPaintPlayer();
-            xPaintCannonballs();
-            xPaintBunkers();
-
-            paint_invaders();
-
-            paintUI();
-            xPaintPlayer();
-
-            //paintMissileTypeA(50, 50, 3);
-            xPaintMissiles();
-        }
-        tumDrawClear(Black); // Clear screen
-        tumFontSetSize(32);
-        drawButtons();
-
+        state_t * state = &States[State];
+        
+        state->paintFunc();
         tumDrawUpdateScreen(); // Refresh the screen to draw string
-
 
         vTaskDelay((TickType_t)RENDERDELAY);
     }
@@ -142,4 +119,33 @@ void drawButtons(){
     for(int i=0; i< state->num_buttons; i++){
         drawButton(&state->Buttons[i]);
     }
+}
+
+void drawMenuScreen(){
+    tumFontSetSize(32);
+    tumDrawClear(Black); // Clear screen
+    drawButtons();
+}
+
+void drawSingleplayerScreen(){
+    tumFontSetSize(20);
+    tumDrawClear(Black); // Clear screen
+    xPaintPlayer();
+    xPaintCannonballs();
+    xPaintBunkers();
+
+    paint_invaders();
+
+    paintUI();
+    xPaintPlayer();
+
+    //paintMissileTypeA(50, 50, 3);
+    xPaintMissiles();
+}
+
+
+void drawHighscoreScreen(){
+    tumFontSetSize(32);
+    tumDrawClear(Black); // Clear screen
+    drawButtons();
 }

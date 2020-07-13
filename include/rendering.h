@@ -39,6 +39,7 @@ extern TaskHandle_t RenderingTask;
 void renderInit(void);
 
 void drawMenuScreen();
+void drawSingleplayerScreen();
 void drawHighscoreScreen();
 
 void drawButton(button_t * button);

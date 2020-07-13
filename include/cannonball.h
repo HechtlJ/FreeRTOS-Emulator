@@ -61,6 +61,8 @@ void init_cannonballs();
 void paint_cannonballs();
 void create_cannonball(int x, int y);
 void move_cannonballs();
+void xResetCannonballs();
+void reset_cannonballs();
 
 
 #endif /* CANNONBALL_H */

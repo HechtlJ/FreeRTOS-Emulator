@@ -4,7 +4,7 @@
 #include "missile.h"
 #include "stdlib.h"
 #include "time.h"
-#include "level.h"
+#include "game.h"
 
 //TODO: switch to queue for points
 #include "player.h"
@@ -59,6 +59,7 @@ void invaderInit(){
          //goto err_rendertask;
         printf("error in creating invader task\n");
     }
+    vTaskSuspend(InvaderTask);
 }
 
 void paint_invaders(){
