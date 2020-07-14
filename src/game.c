@@ -31,11 +31,20 @@ void game_over();
 
 void initStates(){
     State = STATE_MAIN_MENU;
+    HighscoreHandle = xSemaphoreCreateMutex();
+    CheatsHandle = xSemaphoreCreateMutex();
+    Cheats.startingLevel = 1;
+    Cheats.startingScore = 0;
+    Cheats.unlimitedCannonballs = false;
+    Cheats.unlimitedLives = false;
+    highScoreSingleplayer = 0;
+    highScoreMultiplayer = 0;
     initMainMenu();
     initHighscore();
     initSingleplayer();
     initMultiplayer();
     initPause();
+    initCheats();
 }
 
 void initMainMenu(){
@@ -65,7 +74,7 @@ void initMainMenu(){
     state->Buttons[3].txt = "CHEATS";
     state->Buttons[3].y_coord = 400;
     state->Buttons[3].active = true;
-    state->Buttons[3].action = opponent_resume;
+    state->Buttons[3].action = switchToCheats;
     state->Buttons[3].colour = Red;
 
 
@@ -88,6 +97,7 @@ void initHighscore(){
 
     state->paintFunc = drawHighscoreScreen;
 }
+
 
 void initSingleplayer(){
     state_t * state = &States[STATE_SINGLEPLAYER];
@@ -123,6 +133,28 @@ void initPause(){
     state->Buttons[1].colour = Red;
 
     state->paintFunc = drawSingleplayerScreen;
+}
+
+void initCheats(){
+    state_t * state = &States[STATE_CHEATS];
+    state->num_buttons = 2;
+    state->Buttons = malloc(sizeof(button_t) * 2);
+
+    state->Buttons[0].txt = "Off";
+    state->Buttons[0].y_coord = 100;
+    state->Buttons[0].active = false;
+    state->Buttons[0].hover = false;
+    state->Buttons[0].action = xCheatsToggleLives;
+    state->Buttons[0].colour = Red;
+
+    state->Buttons[1].txt = "Off";
+    state->Buttons[1].y_coord = 200;
+    state->Buttons[1].active = false;
+    state->Buttons[1].hover = false;
+    state->Buttons[1].action = xCheatsToggleCannonballs;
+    state->Buttons[1].colour = Red;
+
+    state->paintFunc = drawCheatScreen;
 }
 
 
@@ -167,6 +199,14 @@ void switchToPause(){
 }
 
 
+void switchToCheats(){
+    disable_buttons(&States[State]);
+    State = STATE_CHEATS;
+    enable_buttons(&States[State]);
+}
+
+
+
 void startSingleplayer(){
     xResetPlayer();
     xResetCannonballs();
@@ -190,4 +230,42 @@ void disable_buttons(state_t * state){
     for(int i=0; i<state->num_buttons; i++){
         state->Buttons[i].active=false;
     }
+}
+
+
+void xCheatsToggleLives(){
+    if (xSemaphoreTake(CheatsHandle, (TickType_t)10) == pdTRUE) {
+        if(Cheats.unlimitedLives==true){
+            Cheats.unlimitedLives = false;
+            States[STATE_CHEATS].Buttons[0].colour = Red;
+            States[STATE_CHEATS].Buttons[0].txt = "OFF";
+        }else{
+            Cheats.unlimitedLives = true;
+            States[STATE_CHEATS].Buttons[0].colour = Green;
+            States[STATE_CHEATS].Buttons[0].txt = "ON";
+        }
+		xSemaphoreGive(CheatsHandle);
+	} 
+}
+void xCheatsToggleCannonballs(){
+    if (xSemaphoreTake(CheatsHandle, (TickType_t)10) == pdTRUE) {
+        if(Cheats.unlimitedCannonballs==true){
+            Cheats.unlimitedCannonballs = false;
+            States[STATE_CHEATS].Buttons[1].colour = Red;
+            States[STATE_CHEATS].Buttons[1].txt = "OFF";
+            if(xSemaphoreTake(CannonballHandle, (TickType_t)10) == pdTRUE) {
+                maxNumCannonballs = 1;
+                xSemaphoreGive(CannonballHandle);
+            }
+        }else{
+            Cheats.unlimitedCannonballs = true;
+            States[STATE_CHEATS].Buttons[1].colour = Green;
+            States[STATE_CHEATS].Buttons[1].txt = "ON";
+            if(xSemaphoreTake(CannonballHandle, (TickType_t)10) == pdTRUE) {
+                maxNumCannonballs = 20;
+                xSemaphoreGive(CannonballHandle);
+            }
+        }
+		xSemaphoreGive(CheatsHandle);
+	} 
 }

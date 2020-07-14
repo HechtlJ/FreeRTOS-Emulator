@@ -148,12 +148,41 @@ void drawSingleplayerScreen(){
 
 
 void drawHighscoreScreen(){
-    tumFontSetSize(32);
     tumDrawClear(Black); // Clear screen
+    tumFontSetSize(32);
+    draw_centered_string("HIGHSCORE SINGLEPLAYER", 80, White);
+    char txt[15];
+    sprintf(txt, "%d", highScoreSingleplayer);
+    draw_centered_string(txt, 130, White);
+    draw_centered_string("HIGHSCORE MULTIPLAYER", 200, White);
+    sprintf(txt, "%d", highScoreMultiplayer);
+    draw_centered_string(txt, 250, White);
+
     drawButtons();
 }
+
+
+void drawCheatScreen(){
+    tumDrawClear(Black);
+    tumFontSetSize(52);
+    draw_centered_string("CHEATS", 40, White);
+
+    drawButtons();
+}
+
+
+void draw_centered_string(char * str, int y, int colour){
+    int width;
+    int height;
+    tumGetTextSize(str, &width, &height);
+    int x = (SCREEN_WIDTH - width) / 2;
+    tumDrawText(str, x, y, colour);
+}
+
 
 void drawPauseScreen(){
 
 }
+
+
 

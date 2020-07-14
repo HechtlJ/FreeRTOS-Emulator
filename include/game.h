@@ -2,6 +2,7 @@
 #define LEVEL_H
 
 #include "rendering.h"
+#include "semphr.h"
 
 
 typedef struct{
@@ -37,6 +38,7 @@ void init_level(int level);
 
 int highScoreSingleplayer;
 int highScoreMultiplayer;
+SemaphoreHandle_t HighscoreHandle;
 
 //TODO add mutex for states
 
@@ -48,17 +50,34 @@ void initHighscore();
 void initSingleplayer();
 void initMultiplayer();
 void initPause();
+void initCheats();
 
 void switchToMainMenu();
 void switchToHighscore();
 void switchToSingleplayer();
 void switchToMultiplayer();
 void switchToPause();
+void switchToCheats();
 
 
 void enable_buttons(state_t * state);
 void disable_buttons(state_t * state);
 
+void draw_centered_string(char * str, int y, int colour);
+
+
+typedef struct{
+    bool unlimitedLives;
+    bool unlimitedCannonballs;
+    int startingScore;
+    int startingLevel;
+} cheats_t;
+
+cheats_t Cheats;
+SemaphoreHandle_t CheatsHandle;
+
+void xCheatsToggleLives();
+void xCheatsToggleCannonballs();
 
 
 #endif /* LEVEL_H */

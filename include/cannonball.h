@@ -42,8 +42,8 @@
 #define CANNONBALL_VELOCITY 14
 #define CANNONBALL_WIDTH 3
 #define CANNONBALL_HEIGHT 12
-#define MAX_NUM_CANNONBALLS 1
-#define RELOAD_TIME 2
+#define RELOAD_TIME 4
+
 
 typedef struct {
     int x_coord;
@@ -51,7 +51,9 @@ typedef struct {
     bool exists;
 } cannonball_t;
 
-cannonball_t CannonBalls[MAX_NUM_CANNONBALLS];
+int maxNumCannonballs;
+
+cannonball_t CannonBalls[20];
 xSemaphoreHandle CannonballHandle;
 
 void xPaintCannonballs();

@@ -37,7 +37,7 @@ void vHandleProjectiles(void *pvParameters){
 
 
 
-        for(int i=0; i<MAX_NUM_CANNONBALLS; i++){
+        for(int i=0; i<maxNumCannonballs; i++){
             if(CannonBalls[i].exists){
                 /*if(hitBunker(CannonBalls[0].x_coord, CannonBalls[0].y_coord, CANNONBALL_WIDTH, CANNONBALL_HEIGHT)){
                 CannonBalls[0].exists = false;

@@ -38,6 +38,7 @@ void drawMenuScreen();
 void drawSingleplayerScreen();
 void drawHighscoreScreen();
 void drawPauseScreen();
+void drawCheatScreen();
 
 void drawButton(button_t * button);
 void drawButtons();

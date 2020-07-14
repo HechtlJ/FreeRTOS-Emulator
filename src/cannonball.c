@@ -3,7 +3,8 @@
 #include "stdio.h"
 
 void init_cannonballs(){
-    for(int i=0; i<MAX_NUM_CANNONBALLS; i++){
+    maxNumCannonballs=1;
+    for(int i=0; i<maxNumCannonballs; i++){
         CannonBalls[i].x_coord = 0;
         CannonBalls[i].y_coord = 0;
         CannonBalls[i].exists = false;
@@ -11,14 +12,14 @@ void init_cannonballs(){
 }
 
 void paint_cannonballs(){
-    for(int i=0; i<MAX_NUM_CANNONBALLS; i++){
+    for(int i=0; i<maxNumCannonballs; i++){
         if(CannonBalls[i].exists)
             tumDrawFilledBox(CannonBalls[i].x_coord, CannonBalls[i].y_coord, CANNONBALL_WIDTH, CANNONBALL_HEIGHT, White);
     }
 }
 
 void create_cannonball(int x, int y){
-    for(int i=0; i<MAX_NUM_CANNONBALLS; i++){
+    for(int i=0; i<maxNumCannonballs; i++){
         if(!CannonBalls[i].exists){
             CannonBalls[i].exists = true;
             CannonBalls[i].x_coord = x;
@@ -29,7 +30,7 @@ void create_cannonball(int x, int y){
 }
 
 void move_cannonballs(){
-    for(int i=0; i<MAX_NUM_CANNONBALLS; i++){
+    for(int i=0; i<maxNumCannonballs; i++){
         if(CannonBalls[i].exists){
             CannonBalls[i].exists = true;
             CannonBalls[i].y_coord -= CANNONBALL_VELOCITY;
@@ -82,7 +83,7 @@ void xResetCannonballs(){
 }
 
 void reset_cannonballs(){
-    for(int i=0; i<MAX_NUM_CANNONBALLS; i++){
+    for(int i=0; i<maxNumCannonballs; i++){
         CannonBalls[i].x_coord = 0;
         CannonBalls[i].y_coord = 0;
         CannonBalls[i].exists = false;
