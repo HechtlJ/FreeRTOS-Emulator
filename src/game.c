@@ -45,22 +45,26 @@ void initMainMenu(){
     state->Buttons[0].y_coord = 100;
     state->Buttons[0].active = true;
     state->Buttons[0].action = switchToSingleplayer;
+    state->Buttons[0].colour = Red;
     
 
     state->Buttons[1].txt = "MULTIPLAYER";
     state->Buttons[1].y_coord = 200;
     state->Buttons[1].active = true;
     state->Buttons[1].action = test_func;
+    state->Buttons[1].colour = Red;
 
     state->Buttons[2].txt = "HIGHSCORES";
     state->Buttons[2].y_coord = 300;
     state->Buttons[2].active = true;
     state->Buttons[2].action = switchToHighscore;
+    state->Buttons[2].colour = Red;
 
     state->Buttons[3].txt = "CHEATS";
     state->Buttons[3].y_coord = 400;
     state->Buttons[3].active = true;
     state->Buttons[3].action = test_func;
+    state->Buttons[3].colour = Red;
 
 
     state->paintFunc = drawMenuScreen;
@@ -78,6 +82,7 @@ void initHighscore(){
     state->Buttons[0].active = false;
     state->Buttons[0].hover = false;
     state->Buttons[0].action = switchToMainMenu;
+    state->Buttons[0].colour = Red;
 
     state->paintFunc = drawHighscoreScreen;
 }
@@ -99,12 +104,14 @@ void initPause(){
     state->Buttons[0].active = false;
     state->Buttons[0].hover = false;
     state->Buttons[0].action = switchToSingleplayer;
+    state->Buttons[0].colour = Red;
 
     state->Buttons[1].txt = "QUIT TO MENU";
     state->Buttons[1].y_coord = 250;
     state->Buttons[1].active = false;
     state->Buttons[1].hover = false;
     state->Buttons[1].action = switchToMainMenu;
+    state->Buttons[1].colour = Red;
 
     state->paintFunc = drawSingleplayerScreen;
 }
@@ -143,7 +150,7 @@ void switchToPause(){
 
 void startSingleplayer(){
     xResetPlayer();
-    xResetCannonballs;
+    xResetCannonballs();
     //TODO
     //xResetBunkers;
     reset_bunkers();

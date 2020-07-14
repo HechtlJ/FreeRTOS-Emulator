@@ -13,11 +13,6 @@
 #define FPS 60
 #define RENDERDELAY 1000/FPS
 
-#define STATE_MENU 0
-#define STATE_PLAYING 1
-#define STATE_PAUSE 2
-#define STATE_HIGHSCORE 3
-
 
 #define BUTTON_WIDTH 300
 #define BUTTON_HEIGHT 50
@@ -30,6 +25,7 @@ typedef struct {
     function action;
     bool active;
     bool hover;
+    unsigned int colour;
 }button_t;
 
 

@@ -80,7 +80,7 @@ void drawButton(button_t * button){
     tumFontSetSize(32);
     
     int button_x = (SCREEN_WIDTH - BUTTON_WIDTH)/2;
-    tumDrawFilledBox(button_x, button->y_coord, BUTTON_WIDTH, BUTTON_HEIGHT, Red);
+    tumDrawFilledBox(button_x, button->y_coord, BUTTON_WIDTH, BUTTON_HEIGHT, button->colour);
 
     int txt_width;
     int txt_height;

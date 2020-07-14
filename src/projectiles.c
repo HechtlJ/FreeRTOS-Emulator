@@ -42,7 +42,7 @@ void vHandleProjectiles(void *pvParameters){
                 /*if(hitBunker(CannonBalls[0].x_coord, CannonBalls[0].y_coord, CANNONBALL_WIDTH, CANNONBALL_HEIGHT)){
                 CannonBalls[0].exists = false;
                 }*/
-                if(checkBunkerHit(CannonBalls[i].x_coord, CannonBalls[i].y_coord, true, DAMAGE_CANNONBALL)){
+                if(xCheckBunkerHit(CannonBalls[i].x_coord, CannonBalls[i].y_coord, true, DAMAGE_CANNONBALL)){
                     CannonBalls[i].exists = false;
                 }
                 if(invaders_check_hit(CannonBalls[i].x_coord, CannonBalls[i].y_coord, CANNONBALL_WIDTH, CANNONBALL_HEIGHT)){
@@ -56,7 +56,7 @@ void vHandleProjectiles(void *pvParameters){
 
         for(int i=0; i<NUM_MAX_MISSILES; i++){
             if(Missiles[i].exists){
-                if(checkBunkerHit(Missiles[i].x_coord+1, Missiles[i].y_coord, false, DAMAGE_MISSILE)){
+                if(xCheckBunkerHit(Missiles[i].x_coord+1, Missiles[i].y_coord, false, DAMAGE_MISSILE)){
                     Missiles[i].exists = false;
                 }
             }

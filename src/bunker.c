@@ -15,61 +15,32 @@ void init_bunkers(){
     reset_bunkers();
 }
 
+
 void paint_bunkers(){
     int bunker_x;
     int bunker_y;
     for(int i=0; i<NUM_BUNKERS; i++){
         bunker_x = Bunkers[i].x_coord;
         bunker_y = Bunkers[i].y_coord;
-        //tumDrawLoadedImage(Bunkers[i].img, Bunkers[i].x, Bunkers[i].y);
         for(int x=0; x<NUM_BUNKER_BLOCK_X; x++){
             for(int y=0; y<NUM_BUNKER_BLOCK_Y; y++){
-                if(Bunkers[i].BunkerBlocks[x][y])
+                if(Bunkers[i].BunkerBlocks[x][y])   // Only draw the still existing Bunkerblocks
                     tumDrawFilledBox(bunker_x+x*4, bunker_y+y*4, 4, 4, Green);
             }
         }
     }
 }
 
+
 void xPaintBunkers(){
     if(xSemaphoreTake(BunkerHandle, ( TickType_t ) 10 ) == pdTRUE){
             paint_bunkers();
             xSemaphoreGive(BunkerHandle);
-    }else{
-        //do some error handling
-        printf("error in painting bunker");
     }
 }
 
-/*
-int hitBunker(int x, int y, int w, int h){
-    // Check height
-    int y_min=y;
-    int y_max=y+h;
 
-    if(y_max < BUNKER_Y_COORD || y_min > BUNKER_Y_COORD+BUNKER_HEIGHT)
-        return 0; //no collision
-   
-
-    int x_min = x;
-    int x_max = x + w;
-    
-    for(int i=0; i<NUM_BUNKERS; i++){
-        if(x_max < Bunkers[i].x || x_min > Bunkers[i].x + BUNKER_WIDTH){
-            
-            
-        }else{
-            printf("collision\n");
-            damageBunker(x, y, w, h, i);
-            return 1; // collision
-        }
-
-    }
-    return 0;
-}*/
-
-
-int checkBunkerHit(int x, int y, bool moving_up, int damage){
+int check_bunker_hit(int x, int y, bool moving_up, int damage){
     if(moving_up){
         int hit_x;
         if(y > BUNKER_Y_COORD+BUNKER_HEIGHT)
@@ -81,14 +52,13 @@ int checkBunkerHit(int x, int y, bool moving_up, int damage){
                 hit_x = hit_x/4;
                 for(int hit_y=NUM_BUNKER_BLOCK_Y-1; hit_y>=0; hit_y--){
                     if(Bunkers[i].BunkerBlocks[hit_x][hit_y]==true){
-                        //Bunkers[i].BunkerBlocks[hit_x][hit_y]=false;
-                        damageBunker(&Bunkers[i], hit_x, hit_y, damage);
+                        damage_bunker(&Bunkers[i], hit_x, hit_y, damage);
                         return 1;
                    }
                }
             }
         }
-    }else{
+    }else{  // moving down
         int hit_x;
         if(y < BUNKER_Y_COORD)
             return 0; //No hit
@@ -99,9 +69,8 @@ int checkBunkerHit(int x, int y, bool moving_up, int damage){
                 hit_x = hit_x/4;
                 for(int hit_y=0-1; hit_y<NUM_BUNKER_BLOCK_Y; hit_y++){
                     if(Bunkers[i].BunkerBlocks[hit_x][hit_y]==true){
-                        //Bunkers[i].BunkerBlocks[hit_x][hit_y]=false;
-                        damageBunker(&Bunkers[i], hit_x, hit_y, damage);
-                        return 1;
+                        damage_bunker(&Bunkers[i], hit_x, hit_y, damage);
+                        return 1;   // Hit
                    }
                }
             }
@@ -109,6 +78,17 @@ int checkBunkerHit(int x, int y, bool moving_up, int damage){
     }
     return 0; // No Hit
 }
+
+
+int xCheckBunkerHit(int x, int y, bool moving_up, int damage_type){
+    if(xSemaphoreTake(BunkerHandle, ( TickType_t ) 10 ) == pdTRUE){
+            int ret = check_bunker_hit(x, y, moving_up, damage_type);
+            xSemaphoreGive(BunkerHandle);
+            return ret;
+    }
+    return 0;
+}
+
 
 void try_bunker_destruction(bunker_t * bunker, int x, int y){
     if(x<0 || y<0){
@@ -119,25 +99,9 @@ void try_bunker_destruction(bunker_t * bunker, int x, int y){
     }
     bunker->BunkerBlocks[x][y] = false;
 }
-/*
-void damageBunker(bunker_t * bunker, int hit_x, int hit_y, int damage){
-    int i= 0;
-    for(int x= hit_x - damage; x<= hit_x; x++){
-        for(int y = hit_y-i; i<=hit_y+i; y++){
-            try_bunker_destruction(bunker, x, y);
-        }
-        i++;
-    }
-    i=
-    for(int x= hit_x - damage; x<= hit_x; x++){
-        for(int y = hit_y-i; i<=hit_y+i; y++){
-            try_bunker_destruction(bunker, x, y);
-        }
-        i++;
-    }
-}*/
 
-void damageBunker(bunker_t * bunker, int hit_x, int hit_y, int damage){
+
+void damage_bunker(bunker_t * bunker, int hit_x, int hit_y, int damage){
     if(damage == DAMAGE_CANNONBALL || true){
         try_bunker_destruction(bunker, hit_x, hit_y);
         try_bunker_destruction(bunker, hit_x-1, hit_y);
@@ -159,6 +123,14 @@ void reset_bunkers(){
             Bunkers[2].BunkerBlocks[x][y] = true;
             Bunkers[3].BunkerBlocks[x][y] = true;
         }
+    }
+}
+
+
+void xResetBunkers(){
+    if(xSemaphoreTake(BunkerHandle, ( TickType_t ) 10 ) == pdTRUE){
+            reset_bunkers();
+            xSemaphoreGive(BunkerHandle);
     }
 }
 

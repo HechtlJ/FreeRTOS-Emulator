@@ -171,13 +171,26 @@ int check_bunker_hit(int x, int y, bool moving_up, int damage_type);
  */
 int xCheckBunkerHit(int x, int y, bool moving_up, int damage_type);
 
+/** @brief Damages the bunker at the specified coordinates.
+ * 
+ * Damages the bunker at the specified coordinates. Not thread safe.
+ * 
+ * @param bunker Pointer to the bunker that should be damaged
+ * @param x X-coordinate of the damage relative to the bunkers coordinates
+ * @param y Y-coordinate of the damage relative to the bunkers coordinates
+ * @param damage_type Type of damage that should be inflicted. Can be DAMAGE_CANNONBALL or DAMAGE_MISSILE
+ */
+void damage_bunker(bunker_t * bunker, int x, int y, int damage_type);
 
-void damageBunker(bunker_t * bunker, int x, int y, int damage_type);
-
-
+/** @brief Resets the Bunkers Bunkerblocks.
+ * Resets the Bunkers Bunkerblocks. Not thread safe. For a thread safe variant call xResetBunkers()
+ */
 void reset_bunkers();
-//TODO
-//void xResetBunkers();
+
+/** @brief Resets the Bunkers Bunkerblocks.
+ * Resets the Bunkers Bunkerblocks. Thread safe. For a faster non thread safe variant call reset_bunkers()
+ */
+void xResetBunkers();
 
 
 /** @}*/
