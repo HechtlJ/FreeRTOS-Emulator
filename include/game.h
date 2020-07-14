@@ -46,11 +46,13 @@ void initStates();
 void initMainMenu();
 void initHighscore();
 void initSingleplayer();
+void initMultiplayer();
 void initPause();
 
 void switchToMainMenu();
 void switchToHighscore();
 void switchToSingleplayer();
+void switchToMultiplayer();
 void switchToPause();
 
 

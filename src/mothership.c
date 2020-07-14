@@ -8,6 +8,7 @@
 
 #include "player.h"
 #include "game.h"
+#include "cannonball.h"
 
 #define UDP_BUFFER_SIZE 1024
 #define UDP_RECEIVE_PORT 1234
@@ -75,7 +76,6 @@ void vMothershipTask(void *pvParameters)
 }
 
 void handle_mothership(){
-    int wait = Mothership.wait;
     if(!Mothership.exists){
         if(Mothership.wait==0){
             create_mothership();
@@ -114,10 +114,20 @@ void create_mothership(){
 }
 
 
+void init_opponent(){
+
+}
 
 
 void handle_opponent()
 {
+    if(!Mothership.exists){
+        if(Mothership.wait==0){
+            create_mothership();
+        }
+        Mothership.wait--;
+    }
+    if(C)
 	if (OpponentQueue != NULL) {
 		if (xQueueReceive(OpponentQueue, &msg, (TickType_t)10) ==
 		    pdPASS) {
@@ -137,6 +147,10 @@ void handle_opponent()
 	}
 	Mothership.cycle--;
 }
+
+
+
+
 
 void opponent_pause()
 {

@@ -34,6 +34,7 @@ void initStates(){
     initMainMenu();
     initHighscore();
     initSingleplayer();
+    initMultiplayer();
     initPause();
 }
 
@@ -52,7 +53,7 @@ void initMainMenu(){
     state->Buttons[1].txt = "MULTIPLAYER";
     state->Buttons[1].y_coord = 200;
     state->Buttons[1].active = true;
-    state->Buttons[1].action = opponent_pause;
+    state->Buttons[1].action = switchToMultiplayer;
     state->Buttons[1].colour = Red;
 
     state->Buttons[2].txt = "HIGHSCORES";
@@ -90,6 +91,13 @@ void initHighscore(){
 
 void initSingleplayer(){
     state_t * state = &States[STATE_SINGLEPLAYER];
+    state->num_buttons = 0;
+    state->paintFunc = drawSingleplayerScreen;
+}
+
+
+void initMultiplayer(){
+    state_t * state = &States[STATE_MULTIPLAYER];
     state->num_buttons = 0;
     state->paintFunc = drawSingleplayerScreen;
 }
@@ -139,6 +147,16 @@ void switchToSingleplayer(){
     vTaskResume(InvaderTask);
     vTaskResume(ProjectileTask);
 }
+
+
+void switchToMultiplayer(){
+    disable_buttons(&States[State]);
+    State = STATE_MULTIPLAYER;
+    enable_buttons(&States[State]);
+    vTaskResume(InvaderTask);
+    vTaskResume(ProjectileTask);
+}
+
 
 void switchToPause(){
     disable_buttons(&States[State]);
