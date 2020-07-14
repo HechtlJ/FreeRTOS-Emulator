@@ -31,6 +31,7 @@ void vHandleInvaders(void *pvParameters){
 }
 
 void invaderInit(){
+    srand (time(NULL));
     invaderDelay = INVADER_START_DELAY+10;
     show_bmp1 = true;
     movement = 0;
@@ -174,7 +175,6 @@ int invaders_check_hit(int x, int y, int w, int h){
 }
 
 void invader_shoot(){
-    srand (time(NULL));
     int column = rand() % NUM_INVADER_COLUMNS + 1;
     char type = rand() % 4;  // There are 3 types
 

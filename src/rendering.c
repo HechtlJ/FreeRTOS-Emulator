@@ -11,6 +11,7 @@
 #include "game.h"
 #include "stdio.h"
 #include "TUM_Font.h"
+#include "mothership.h"
 
 TaskHandle_t RenderingTask;
 
@@ -55,6 +56,7 @@ void vRender(void *pvParameters){
         state_t * state = &States[State];
 
         state->paintFunc();
+        draw_mothership();
         tumDrawUpdateScreen(); // Refresh the screen to draw string
 
         vTaskDelay((TickType_t)RENDERDELAY);

@@ -7,6 +7,7 @@
 #include "invaders.h"
 #include "missile.h"
 #include "game.h"
+#include "mothership.h"
 
 void test_func(){
     printf("testfunc \n");
@@ -51,7 +52,7 @@ void initMainMenu(){
     state->Buttons[1].txt = "MULTIPLAYER";
     state->Buttons[1].y_coord = 200;
     state->Buttons[1].active = true;
-    state->Buttons[1].action = test_func;
+    state->Buttons[1].action = opponent_pause;
     state->Buttons[1].colour = Red;
 
     state->Buttons[2].txt = "HIGHSCORES";
@@ -63,7 +64,7 @@ void initMainMenu(){
     state->Buttons[3].txt = "CHEATS";
     state->Buttons[3].y_coord = 400;
     state->Buttons[3].active = true;
-    state->Buttons[3].action = test_func;
+    state->Buttons[3].action = opponent_resume;
     state->Buttons[3].colour = Red;
 
 

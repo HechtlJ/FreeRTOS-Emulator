@@ -29,6 +29,7 @@
 #include "invaders.h"
 #include "missile.h"
 #include "game.h"
+#include "mothership.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -150,6 +151,7 @@ int main(int argc, char *argv[])
     projectileInit();
     
     renderInit();
+    init_udp();
     vTaskStartScheduler();
 
     return EXIT_SUCCESS;
