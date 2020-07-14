@@ -127,7 +127,7 @@ void handle_opponent()
         }
         Mothership.wait--;
     }
-    if(C)
+    
 	if (OpponentQueue != NULL) {
 		if (xQueueReceive(OpponentQueue, &msg, (TickType_t)10) ==
 		    pdPASS) {
