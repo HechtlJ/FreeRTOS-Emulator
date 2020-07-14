@@ -51,6 +51,9 @@ void vHandleProjectiles(void *pvParameters){
                         next_level();
                     }
                 }
+                if(mothership_check_hit(CannonBalls[i].x_coord, CannonBalls[i].y_coord, CANNONBALL_HEIGHT)){
+                    CannonBalls[i].exists = false;
+                }
             }
         }
 

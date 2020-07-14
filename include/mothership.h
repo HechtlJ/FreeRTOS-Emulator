@@ -19,8 +19,10 @@ int msg;
 
 #define MOTHERSHIP_Y_COORD 50
 #define MOTHERSHIP_WIDTH 64
+#define MOTHERSHIP_HEIGHT 28
 #define MOTHERSHIP_SPEED 4
 #define MOTHERSHIP_MAX_WAIT 260
+#define MOTHERSHIP_POINTS 400
 
 
 typedef struct {
@@ -57,7 +59,7 @@ void handle_opponent();
 void init_opponent();
 void exit_opponent();
 
-
+int mothership_check_hit(int x, int y, int height);
 
 void draw_mothership();
 

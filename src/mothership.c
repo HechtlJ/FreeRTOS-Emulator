@@ -211,6 +211,30 @@ void draw_mothership()
 	}
 }
 
+int mothership_check_hit(int x, int y, int height){
+    if(Mothership.exists == false){
+        return 0;
+    }
+
+    int hit_y = y - MOTHERSHIP_Y_COORD;
+    int hit_x = x - Mothership.x_coord;
+
+    if(hit_y > MOTHERSHIP_HEIGHT || hit_y < -height){
+        return 0; // No Hit
+    }
+
+    if(hit_x < 0 || hit_x > MOTHERSHIP_WIDTH){
+        return 0;
+    }
+    
+    if(xSemaphoreTake(PlayerHandle, ( TickType_t ) 10 ) == pdTRUE){
+        Player.Points += MOTHERSHIP_POINTS;
+        xSemaphoreGive(PlayerHandle);
+    }
+    kill_mothership();
+    return 1;
+}
+
 /*
 void vUDPControlTask(void *pvParameters)
 {
