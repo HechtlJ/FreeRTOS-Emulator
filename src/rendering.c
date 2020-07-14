@@ -50,13 +50,32 @@ void vRender(void *pvParameters){
     tumFontLoadFont("IBMPlexSans-SemiBold.ttf", 18);
     tumFontSelectFontFromName("IBMPlexSans-SemiBold.ttf");
 
-    
+    int fpsCount=0;
+    TickType_t lastWakeTime = xTaskGetTickCount();
+    TickType_t WakeTime;
+    int fps = MAX_FPS;
+    char fps_str[5];
 
+    
     for(;;){
+        if(fpsCount==FPS_AVERAGE_COUNT){
+            WakeTime = xTaskGetTickCount();
+            fps = configTICK_RATE_HZ / (WakeTime - lastWakeTime);
+            fps = 2 * (MAX_FPS/FPS_AVERAGE_COUNT) * fps;
+            lastWakeTime = WakeTime;
+            fpsCount = 0;
+        }else{
+            fpsCount++;
+        }
+
+
+
         state_t * state = &States[State];
 
         state->paintFunc();
         draw_mothership();
+        sprintf(fps_str, "%d", fps);
+        tumDrawText(fps_str, 250, 250, Yellow);
         tumDrawUpdateScreen(); // Refresh the screen to draw string
 
         vTaskDelay((TickType_t)RENDERDELAY);

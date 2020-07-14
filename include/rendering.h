@@ -10,8 +10,8 @@
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
 
 
-#define FPS 60
-#define RENDERDELAY 1000/FPS
+#define MAX_FPS 60
+#define RENDERDELAY 1000/MAX_FPS
 
 
 #define BUTTON_WIDTH 300
@@ -42,6 +42,10 @@ void drawCheatScreen();
 
 void drawButton(button_t * button);
 void drawButtons();
+
+
+
+#define FPS_AVERAGE_COUNT 10
 
 
 #endif /* RENDERING_H */
