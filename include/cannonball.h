@@ -42,7 +42,7 @@
 #define CANNONBALL_VELOCITY 14
 #define CANNONBALL_WIDTH 3
 #define CANNONBALL_HEIGHT 12
-#define RELOAD_TIME 4
+#define RELOAD_TIME 2
 
 
 typedef struct {

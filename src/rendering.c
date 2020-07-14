@@ -103,7 +103,7 @@ void drawButton(button_t * button){
 void renderInit(void)
 {
     if(xTaskCreate(vRender, "RenderingTask", mainGENERIC_STACK_SIZE*2, NULL,
-     configMAX_PRIORITIES, &RenderingTask) != pdPASS) {
+     configMAX_PRIORITIES-1, &RenderingTask) != pdPASS) {
          //PRINT_TASK_ERROR("RenderTask");
          goto err_rendertask;
     }
@@ -165,7 +165,21 @@ void drawHighscoreScreen(){
 void drawCheatScreen(){
     tumDrawClear(Black);
     tumFontSetSize(52);
-    draw_centered_string("CHEATS", 40, White);
+    draw_centered_string("CHEATS", 5, White);
+
+    tumFontSetSize(26);
+    draw_centered_string("UNLIMITED LIVES", 90, White);
+    draw_centered_string("UNLIMITED CANNONBALLS", 200, White);
+
+    draw_centered_string("STARTING SCORE", 310, White);
+    char * txt[50];
+    sprintf(txt, "<<< [w] << [e] <   %d   > [r] >> [t] >>>", Cheats.startingScore);
+    draw_centered_string(txt, 350, White);
+
+    draw_centered_string("STARTING Level", 430, White);
+    sprintf(txt, "<<< [s] << [d] <   %d   > [f] >> [g] >>>", Cheats.startingLevel);
+    draw_centered_string(txt, 470, White);
+
 
     drawButtons();
 }

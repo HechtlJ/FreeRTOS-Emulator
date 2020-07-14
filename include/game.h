@@ -19,8 +19,9 @@ typedef struct{
 #define STATE_PAUSE 3
 #define STATE_HIGHSCORE 4
 #define STATE_CHEATS 5
+#define NUM_STATES 6
 
-state_t States[6];
+state_t States[NUM_STATES];
 int State;
 
 
@@ -78,6 +79,11 @@ SemaphoreHandle_t CheatsHandle;
 
 void xCheatsToggleLives();
 void xCheatsToggleCannonballs();
+void xCheatsIncreaseStartingScore();
+void xCheatsDecreaseStartingScore();
+
+
+void xTogglePause();
 
 
 #endif /* LEVEL_H */

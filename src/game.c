@@ -50,7 +50,7 @@ void initStates(){
 void initMainMenu(){
     state_t * state = &States[STATE_MAIN_MENU];
     state->num_buttons = 4;
-    state->Buttons = malloc(sizeof(button_t) * 4);
+    state->Buttons = malloc(sizeof(button_t) * state->num_buttons);
 
     state->Buttons[0].txt = "SINGLEPLAYER";
     state->Buttons[0].y_coord = 100;
@@ -86,7 +86,7 @@ void initMainMenu(){
 void initHighscore(){
     state_t * state = &States[STATE_HIGHSCORE];
     state->num_buttons = 1;
-    state->Buttons = malloc(sizeof(button_t) * 1);
+    state->Buttons = malloc(sizeof(button_t) * state->num_buttons);
 
     state->Buttons[0].txt = "BACK";
     state->Buttons[0].y_coord = 400;
@@ -116,7 +116,7 @@ void initMultiplayer(){
 void initPause(){
     state_t * state = &States[STATE_PAUSE];
     state->num_buttons = 2;
-    state->Buttons = malloc(sizeof(button_t) * 2);
+    state->Buttons = malloc(sizeof(button_t) * state->num_buttons);
 
     state->Buttons[0].txt = "Continue";
     state->Buttons[0].y_coord = 150;
@@ -137,22 +137,29 @@ void initPause(){
 
 void initCheats(){
     state_t * state = &States[STATE_CHEATS];
-    state->num_buttons = 2;
-    state->Buttons = malloc(sizeof(button_t) * 2);
+    state->num_buttons = 3;
+    state->Buttons = malloc(sizeof(button_t) * state->num_buttons);
 
     state->Buttons[0].txt = "Off";
-    state->Buttons[0].y_coord = 100;
+    state->Buttons[0].y_coord = 130;
     state->Buttons[0].active = false;
     state->Buttons[0].hover = false;
     state->Buttons[0].action = xCheatsToggleLives;
     state->Buttons[0].colour = Red;
 
     state->Buttons[1].txt = "Off";
-    state->Buttons[1].y_coord = 200;
+    state->Buttons[1].y_coord = 240;
     state->Buttons[1].active = false;
     state->Buttons[1].hover = false;
     state->Buttons[1].action = xCheatsToggleCannonballs;
     state->Buttons[1].colour = Red;
+
+    state->Buttons[2].txt = "BACK";
+    state->Buttons[2].y_coord = 550;
+    state->Buttons[2].active = false;
+    state->Buttons[2].hover = false;
+    state->Buttons[2].action = switchToMainMenu;
+    state->Buttons[2].colour = Red;
 
     state->paintFunc = drawCheatScreen;
 }
@@ -178,6 +185,8 @@ void switchToSingleplayer(){
     enable_buttons(&States[State]);
     vTaskResume(InvaderTask);
     vTaskResume(ProjectileTask);
+    vTaskResume(MothershipTask);
+    opponent_resume();
 }
 
 
@@ -187,6 +196,8 @@ void switchToMultiplayer(){
     enable_buttons(&States[State]);
     vTaskResume(InvaderTask);
     vTaskResume(ProjectileTask);
+    vTaskResume(MothershipTask);
+    opponent_resume();
 }
 
 
@@ -196,6 +207,8 @@ void switchToPause(){
     enable_buttons(&States[State]);
     vTaskSuspend(InvaderTask);
     vTaskSuspend(ProjectileTask);
+    vTaskSuspend(MothershipTask);
+    opponent_pause();
 }
 
 
@@ -247,6 +260,8 @@ void xCheatsToggleLives(){
 		xSemaphoreGive(CheatsHandle);
 	} 
 }
+
+
 void xCheatsToggleCannonballs(){
     if (xSemaphoreTake(CheatsHandle, (TickType_t)10) == pdTRUE) {
         if(Cheats.unlimitedCannonballs==true){
@@ -268,4 +283,27 @@ void xCheatsToggleCannonballs(){
         }
 		xSemaphoreGive(CheatsHandle);
 	} 
+}
+
+void xCheatsIncreaseStartingScore(){
+    if (xSemaphoreTake(CheatsHandle, (TickType_t)10) == pdTRUE) {
+        Cheats.startingScore++;
+		xSemaphoreGive(CheatsHandle);
+	} 
+}
+
+
+void xCheatsDecreaseStartingScore(){
+    if (xSemaphoreTake(CheatsHandle, (TickType_t)10) == pdTRUE) {
+        Cheats.startingScore--;
+        if(Cheats.startingScore<0){
+            Cheats.startingScore = 0;
+        }
+		xSemaphoreGive(CheatsHandle);
+	} 
+}
+
+
+void xTogglePause(){
+    switchToPause();
 }

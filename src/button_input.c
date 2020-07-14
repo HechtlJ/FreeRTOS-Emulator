@@ -77,25 +77,19 @@ void vHandleButtons(void *pvParameters){
         }
 
         if (xSemaphoreTake(buttons.lock, 0) == pdTRUE) {
-            if (buttons.buttons[KEYCODE(
-                                    Q)]) { // Equiv to SDL_SCANCODE_Q
-                exit(EXIT_SUCCESS);
-            }else if(buttons.buttons[SDL_SCANCODE_LEFT]){
-                xPlayerMoveLeft();
-            }else if(buttons.buttons[SDL_SCANCODE_RIGHT]){
-                xPlayerMoveRight();
+            for(int i=0; i<NUM_KEY_ACTIONS; i++){
+                handleKeyAction(&KeyActions[i]);
             }
+            /*
             if(buttons.buttons[SDL_SCANCODE_UP]){
                 unsigned int msg = CMD_PLAYER_SHOOT;
-                /* Block time of 0 says don't block if the queue is already full.*/
+                // Block time of 0 says don't block if the queue is already full.
                 if( xQueueSend( ProjectilesQueue, ( void * ) &msg, ( TickType_t ) 0 ) != pdPASS )
                 {
-                    /* Failed to post the message, even after 10 ticks. */
+                    // Failed to post the message, even after 10 ticks. 
                 }
-            }
-            if(buttons.buttons[KEYCODE(P)]){
-                switchToPause();
-            }
+            }*/
+            
             state_t * state = &States[State];
             for(int i=0; i<state->num_buttons; i++){
                 handleButton(&state->Buttons[i]);
@@ -107,17 +101,150 @@ void vHandleButtons(void *pvParameters){
 }
 
 void buttonInit(){
-    if(xTaskCreate(vHandleButtons, "ButtonTask", mainGENERIC_STACK_SIZE*2, NULL,
-     configMAX_PRIORITIES-1, &ButtonTask) != pdPASS) {
-         //PRINT_TASK_ERROR("RenderTask");
-         //goto err_rendertask;
+
+
+    for(int i=0; i<NUM_KEY_ACTIONS; i++){
+        for(int l=0; l<NUM_STATES; l++){
+            KeyActions[i].activeForState[l] = false;
+        }
     }
+    
+    for(int i=0; i<NUM_STATES; i++){
+        KeyActions[ExitAction].activeForState[i] = true;
+    }
+    KeyActions[ExitAction].callback=clean_exit;
+    KeyActions[ExitAction].debounceDelay=0;
+    KeyActions[ExitAction].lastButtonState=false;
+    KeyActions[ExitAction].waitTime=0;
+    KeyActions[ExitAction].keycode = KEYCODE(Q);
+    
+
+
+    KeyActions[PauseAction].activeForState[STATE_SINGLEPLAYER] = true;
+    KeyActions[PauseAction].activeForState[STATE_MULTIPLAYER] = true;
+    KeyActions[PauseAction].activeForState[STATE_PAUSE] = true;
+    KeyActions[PauseAction].callback=xTogglePause;
+    KeyActions[PauseAction].debounceDelay=5;
+    KeyActions[PauseAction].lastButtonState=false;
+    KeyActions[PauseAction].waitTime=0;
+    KeyActions[PauseAction].keycode = KEYCODE(P);
+
+
+    KeyActions[MovePlayerLeftAction].activeForState[STATE_SINGLEPLAYER] = true;
+    KeyActions[MovePlayerLeftAction].activeForState[STATE_MULTIPLAYER] = true;
+    KeyActions[MovePlayerLeftAction].callback=xPlayerMoveLeft;
+    KeyActions[MovePlayerLeftAction].debounceDelay=0;
+    KeyActions[MovePlayerLeftAction].lastButtonState=false;
+    KeyActions[MovePlayerLeftAction].waitTime=0;
+    KeyActions[MovePlayerLeftAction].keycode = SDL_SCANCODE_LEFT;
+
+
+    KeyActions[MovePlayerRightAction].activeForState[STATE_SINGLEPLAYER] = true;
+    KeyActions[MovePlayerRightAction].activeForState[STATE_MULTIPLAYER] = true;
+    KeyActions[MovePlayerRightAction].callback=xPlayerMoveRight;
+    KeyActions[MovePlayerRightAction].debounceDelay=0;
+    KeyActions[MovePlayerRightAction].lastButtonState=false;
+    KeyActions[MovePlayerRightAction].waitTime=0;
+    KeyActions[MovePlayerRightAction].keycode = SDL_SCANCODE_RIGHT;
+
+
+    KeyActions[PlayerShootAction].activeForState[STATE_SINGLEPLAYER] = true;
+    KeyActions[PlayerShootAction].activeForState[STATE_MULTIPLAYER] = true;
+    KeyActions[PlayerShootAction].callback=shootCallback;
+    KeyActions[PlayerShootAction].debounceDelay=0;
+    KeyActions[PlayerShootAction].lastButtonState=false;
+    KeyActions[PlayerShootAction].waitTime=0;
+    KeyActions[PlayerShootAction].keycode = SDL_SCANCODE_SPACE;
+
+
+    KeyActions[CheatsDecreaseStartingScoreAction].activeForState[STATE_CHEATS] = true;
+    KeyActions[CheatsDecreaseStartingScoreAction].callback=xCheatsDecreaseStartingScore;
+    KeyActions[CheatsDecreaseStartingScoreAction].debounceDelay=0;
+    KeyActions[CheatsDecreaseStartingScoreAction].lastButtonState=false;
+    KeyActions[CheatsDecreaseStartingScoreAction].waitTime=0;
+    KeyActions[CheatsDecreaseStartingScoreAction].keycode = KEYCODE(W);
+
+
+    KeyActions[CheatsIncreaseStartingScoreAction].activeForState[STATE_CHEATS] = true;
+    KeyActions[CheatsIncreaseStartingScoreAction].callback=xCheatsIncreaseStartingScore;
+    KeyActions[CheatsIncreaseStartingScoreAction].debounceDelay=0;
+    KeyActions[CheatsIncreaseStartingScoreAction].lastButtonState=false;
+    KeyActions[CheatsIncreaseStartingScoreAction].waitTime=0;
+    KeyActions[CheatsIncreaseStartingScoreAction].keycode = KEYCODE(T);
+
+
+    KeyActions[CheatsDecreaseStartingScoreActionSlow].activeForState[STATE_CHEATS] = true;
+    KeyActions[CheatsDecreaseStartingScoreActionSlow].callback=xCheatsDecreaseStartingScore;
+    KeyActions[CheatsDecreaseStartingScoreActionSlow].debounceDelay=1;
+    KeyActions[CheatsDecreaseStartingScoreActionSlow].lastButtonState=false;
+    KeyActions[CheatsDecreaseStartingScoreActionSlow].waitTime=0;
+    KeyActions[CheatsDecreaseStartingScoreActionSlow].keycode = KEYCODE(E);
+
+
+    KeyActions[CheatsIncreaseStartingScoreActionSlow].activeForState[STATE_CHEATS] = true;
+    KeyActions[CheatsIncreaseStartingScoreActionSlow].callback=xCheatsIncreaseStartingScore;
+    KeyActions[CheatsIncreaseStartingScoreActionSlow].debounceDelay=1;
+    KeyActions[CheatsIncreaseStartingScoreActionSlow].lastButtonState=false;
+    KeyActions[CheatsIncreaseStartingScoreActionSlow].waitTime=0;
+    KeyActions[CheatsIncreaseStartingScoreActionSlow].keycode = KEYCODE(R);
 
 
 
     buttons.lock = xSemaphoreCreateMutex(); // Locking mechanism
     if (!buttons.lock) {
         //PRINT_ERROR("Failed to create buttons lock");
+    }
+
+
+    if(xTaskCreate(vHandleButtons, "ButtonTask", mainGENERIC_STACK_SIZE*2, NULL,
+     configMAX_PRIORITIES-1, &ButtonTask) != pdPASS) {
+         //PRINT_TASK_ERROR("RenderTask");
+         //goto err_rendertask;
+    }
+
+}
+
+void handleKeyAction(key_action_t * KeyAction){
+    if(KeyAction->activeForState[State]==false){
+        return;
+    }
+    if(KeyAction->debounceDelay==0){
+        if(buttons.buttons[KeyAction->keycode]){
+            KeyAction->callback();
+            return;
+        }
+    }
+
+    if(KeyAction->waitTime==0){
+        if(buttons.buttons[KeyAction->keycode]){
+            if(KeyAction->lastButtonState == false){
+                KeyAction->lastButtonState=true;
+                KeyAction->callback();
+                KeyAction->waitTime = KeyAction->debounceDelay;
+            }
+        }else{
+            if(KeyAction->lastButtonState==true){
+                KeyAction->lastButtonState=false;
+                KeyAction->waitTime = KeyAction->debounceDelay;
+            }
+        }
+    }else{
+        KeyAction->waitTime--;
+    }
+}
+
+
+
+void clean_exit(){
+    exit(EXIT_SUCCESS);
+}
+
+
+void shootCallback(){
+    unsigned int msg = CMD_PLAYER_SHOOT;
+    if( xQueueSend( ProjectilesQueue, ( void * ) &msg, ( TickType_t ) 0 ) != pdPASS )
+    {
+        // Failed to post the message, even after 10 ticks. 
     }
 }
 

@@ -31,6 +31,7 @@
 
 #include "FreeRTOS.h"
 #include "task.h"
+#include "game.h"
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
@@ -38,11 +39,37 @@
 #define DEBOUNCE_LENGTH 5
 
 int mouseDebounce;
-/*
-typedef struct {
-    int keycode;
 
-}key_action_t;  */
+typedef struct {
+  int keycode;
+  bool activeForState[NUM_STATES];
+  function callback;
+  int debounceDelay;
+  bool lastButtonState;
+  int waitTime;
+}key_action_t;  
+
+#define NUM_KEY_ACTIONS 9
+key_action_t KeyActions[NUM_KEY_ACTIONS];
+
+#define ExitAction 0
+#define PauseAction 1
+#define MovePlayerLeftAction 2
+#define MovePlayerRightAction 3
+#define PlayerShootAction 4
+#define CheatsDecreaseStartingScoreAction 5
+#define CheatsIncreaseStartingScoreAction 6
+#define CheatsDecreaseStartingScoreActionSlow 7
+#define CheatsIncreaseStartingScoreActionSlow 8
+
+
+void handleKeyAction(key_action_t * KeyAction);
+
+
+void clean_exit();
+void shootCallback();
+
+
 
 
 
