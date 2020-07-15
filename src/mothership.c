@@ -69,7 +69,9 @@ void vMothershipTask(void *pvParameters)
         if(State==STATE_SINGLEPLAYER){
             handle_mothership();
         }else if(State==STATE_MULTIPLAYER){
+            taskENTER_CRITICAL();
             handle_opponent();
+            taskEXIT_CRITICAL();
         }
 		vTaskDelay((TickType_t)(1000 / 30));
 	}
@@ -101,7 +103,6 @@ void kill_mothership(){
 
 void create_mothership(){
     bool left = rand() % 2;
-    printf("\n Left: %d", left);
     if(left){
         Mothership.x_coord = -MOTHERSHIP_WIDTH;
         Mothership.movement = MOTHERSHIP_SPEED;

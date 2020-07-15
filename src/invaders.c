@@ -18,7 +18,6 @@ void vHandleInvaders(void *pvParameters){
 
 
     for(;;){
-
         if(show_bmp1){
             show_bmp1=false;
         }else{
@@ -100,17 +99,14 @@ void move_invaders_left(){
 }
 
 void move_invaders_down(){
-    /*
-    if(shiftDown >= INVADER_MAX_SHIFT_DOWN){
-        // Game OVer
-        printf("Game Over");
-    }*/
     for(int r=0; r<NUM_INVADER_ROWS; r++){
         for(int c=0; c<NUM_INVADER_COLUMNS; c++){
             Invaders[r][c].y+=INVADER_DOWN_STEP;
+            if(Invaders[r][c].y > INVADER_MAX_Y && Invaders[r][c].alive){
+                switchToGameOver();
+            }
         }
     }
-    //shiftDown += INVADER_DOWN_STEP;
 }
 
 #define MOVING_RIGHT 0

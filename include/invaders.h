@@ -4,6 +4,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "stdbool.h"
+#include "player.h"
 
 
 #define mainGENERIC_PRIORITY (tskIDLE_PRIORITY)
@@ -25,7 +26,7 @@
 #define INVADER_SIDE_STEP 10
 #define INVADER_DOWN_STEP 10
 
-#define INVADER_MAX_SHIFT_DOWN 100
+#define INVADER_MAX_Y PLAYER_Y_COORD - INVADER_HEIGHT
 
 #define INVADER_START_DELAY 1000
 #define INVADER_DELAY_DECREASE INVADER_START_DELAY / (NUM_INVADER_ROWS * NUM_INVADER_COLUMNS)

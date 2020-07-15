@@ -122,7 +122,8 @@ void buttonInit(){
 
     KeyActions[PauseAction].activeForState[STATE_SINGLEPLAYER] = true;
     KeyActions[PauseAction].activeForState[STATE_MULTIPLAYER] = true;
-    KeyActions[PauseAction].activeForState[STATE_PAUSE] = true;
+    KeyActions[PauseAction].activeForState[STATE_PAUSE_SINGLEPLAYER] = true;
+    KeyActions[PauseAction].activeForState[STATE_PAUSE_MULTIPLAYER] = true;
     KeyActions[PauseAction].callback=xTogglePause;
     KeyActions[PauseAction].debounceDelay=5;
     KeyActions[PauseAction].lastButtonState=false;

@@ -39,13 +39,12 @@ void drawSingleplayerScreen();
 void drawHighscoreScreen();
 void drawPauseScreen();
 void drawCheatScreen();
+void drawGameOverSingleplayerScreen();
+void drawGameOverMultiplayerScreen();
 
 void drawButton(button_t * button);
 void drawButtons();
 
-
-
-#define FPS_AVERAGE_COUNT 10
 
 
 #endif /* RENDERING_H */

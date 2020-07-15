@@ -61,7 +61,10 @@ void vHandleProjectiles(void *pvParameters){
             if(Missiles[i].exists){
                 if(xCheckBunkerHit(Missiles[i].x_coord+1, Missiles[i].y_coord, false, DAMAGE_MISSILE)){
                     Missiles[i].exists = false;
+                }else if(xCheckPlayerHit(Missiles[i].x_coord+1, Missiles[i].y_coord, MISSILE_HEIGHT)){
+                    Missiles[i].exists = false;
                 }
+
             }
         }
 

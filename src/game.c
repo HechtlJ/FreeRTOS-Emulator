@@ -9,9 +9,6 @@
 #include "game.h"
 #include "mothership.h"
 
-void test_func(){
-    printf("testfunc \n");
-}
 
 void init_levels(){
     Level = xSemaphoreCreateCounting(9999, 1);
@@ -24,9 +21,6 @@ void next_level(){
     int offset = 0; //TODO
     invader_reset(offset);
 }
-
-
-void game_over();
 
 
 void initStates(){
@@ -45,6 +39,7 @@ void initStates(){
     initMultiplayer();
     initPause();
     initCheats();
+    initGameOver();
 }
 
 void initMainMenu(){
@@ -55,14 +50,14 @@ void initMainMenu(){
     state->Buttons[0].txt = "SINGLEPLAYER";
     state->Buttons[0].y_coord = 100;
     state->Buttons[0].active = true;
-    state->Buttons[0].action = switchToSingleplayer;
+    state->Buttons[0].action = startSingleplayer;
     state->Buttons[0].colour = Red;
     
 
     state->Buttons[1].txt = "MULTIPLAYER";
     state->Buttons[1].y_coord = 200;
     state->Buttons[1].active = true;
-    state->Buttons[1].action = switchToMultiplayer;
+    state->Buttons[1].action = startMultiplayer;
     state->Buttons[1].colour = Red;
 
     state->Buttons[2].txt = "HIGHSCORES";
@@ -114,7 +109,7 @@ void initMultiplayer(){
 
 
 void initPause(){
-    state_t * state = &States[STATE_PAUSE];
+    state_t * state = &States[STATE_PAUSE_SINGLEPLAYER];
     state->num_buttons = 2;
     state->Buttons = malloc(sizeof(button_t) * state->num_buttons);
 
@@ -133,7 +128,30 @@ void initPause(){
     state->Buttons[1].colour = Red;
 
     state->paintFunc = drawSingleplayerScreen;
+
+
+    state = &States[STATE_PAUSE_MULTIPLAYER];
+    state->num_buttons = 2;
+    state->Buttons = malloc(sizeof(button_t) * state->num_buttons);
+
+    state->Buttons[0].txt = "Continue";
+    state->Buttons[0].y_coord = 150;
+    state->Buttons[0].active = false;
+    state->Buttons[0].hover = false;
+    state->Buttons[0].action = switchToMultiplayer;
+    state->Buttons[0].colour = Red;
+
+    state->Buttons[1].txt = "QUIT TO MENU";
+    state->Buttons[1].y_coord = 250;
+    state->Buttons[1].active = false;
+    state->Buttons[1].hover = false;
+    state->Buttons[1].action = switchToMainMenu;
+    state->Buttons[1].colour = Red;
+
+    state->paintFunc = drawSingleplayerScreen;
 }
+
+
 
 void initCheats(){
     state_t * state = &States[STATE_CHEATS];
@@ -165,6 +183,35 @@ void initCheats(){
 }
 
 
+void initGameOver(){
+    state_t * state = &States[STATE_GAMEOVER_SINGLEPLAYER];
+    state->num_buttons = 1;
+    state->Buttons = malloc(sizeof(button_t) * state->num_buttons);
+
+    state->Buttons[0].txt = "BACK TO MENU";
+    state->Buttons[0].y_coord = 450;
+    state->Buttons[0].active = false;
+    state->Buttons[0].hover = false;
+    state->Buttons[0].action = switchToMainMenu;
+    state->Buttons[0].colour = Red;
+
+    state->paintFunc = drawGameOverSingleplayerScreen;
+
+    state = &States[STATE_GAMEOVER_MULTYPLAYER];
+    state->num_buttons = 1;
+    state->Buttons = malloc(sizeof(button_t) * state->num_buttons);
+
+    state->Buttons[0].txt = "BACK TO MENU";
+    state->Buttons[0].y_coord = 450;
+    state->Buttons[0].active = false;
+    state->Buttons[0].hover = false;
+    state->Buttons[0].action = switchToMainMenu;
+    state->Buttons[0].colour = Red;
+
+    state->paintFunc = drawGameOverMultiplayerScreen;
+}
+
+
 void switchToMainMenu(){
     disable_buttons(&States[State]);
     State = STATE_MAIN_MENU;
@@ -186,7 +233,6 @@ void switchToSingleplayer(){
     vTaskResume(InvaderTask);
     vTaskResume(ProjectileTask);
     vTaskResume(MothershipTask);
-    opponent_resume();
 }
 
 
@@ -203,7 +249,12 @@ void switchToMultiplayer(){
 
 void switchToPause(){
     disable_buttons(&States[State]);
-    State = STATE_PAUSE;
+    if(State == STATE_SINGLEPLAYER){
+        State = STATE_PAUSE_SINGLEPLAYER;
+    }
+    if(State == STATE_MULTIPLAYER){
+        State = STATE_PAUSE_MULTIPLAYER;
+    }
     enable_buttons(&States[State]);
     vTaskSuspend(InvaderTask);
     vTaskSuspend(ProjectileTask);
@@ -219,6 +270,27 @@ void switchToCheats(){
 }
 
 
+void switchToGameOver(){
+    disable_buttons(&States[State]);
+    if(State == STATE_SINGLEPLAYER){
+        State = STATE_GAMEOVER_SINGLEPLAYER;
+        if(Player.Points>highScoreSingleplayer){
+            highScoreSingleplayer = Player.Points;
+        }
+    }
+    if(State == STATE_PAUSE_MULTIPLAYER){
+        State = STATE_GAMEOVER_MULTYPLAYER;
+        if(Player.Points>highScoreMultiplayer){
+            highScoreMultiplayer = Player.Points;
+        }
+    }
+    enable_buttons(&States[State]);
+    vTaskSuspend(InvaderTask);
+    vTaskSuspend(ProjectileTask);
+    vTaskSuspend(MothershipTask);
+    opponent_pause();
+}
+
 
 void startSingleplayer(){
     xResetPlayer();
@@ -228,6 +300,20 @@ void startSingleplayer(){
     reset_bunkers();
     xResetMissiles();
     invader_reset(0);
+    switchToSingleplayer();
+    // init_level???
+}
+
+
+void startMultiplayer(){
+    xResetPlayer();
+    xResetCannonballs();
+    //TODO
+    //xResetBunkers;
+    reset_bunkers();
+    xResetMissiles();
+    invader_reset(0);
+    switchToMultiplayer();
     // init_level???
 }
 
@@ -305,5 +391,11 @@ void xCheatsDecreaseStartingScore(){
 
 
 void xTogglePause(){
-    switchToPause();
+    if(State==STATE_SINGLEPLAYER || State == STATE_MULTIPLAYER){
+        switchToPause();
+    }else if(State==STATE_PAUSE_SINGLEPLAYER){
+        switchToSingleplayer();
+    }else if(State==STATE_PAUSE_MULTIPLAYER){
+        switchToMultiplayer();
+    }
 }

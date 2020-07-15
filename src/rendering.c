@@ -24,13 +24,27 @@ void paintUI(){
 
     int y = SCREEN_HEIGHT-UI_HEIGHT + 5;
     char text[12];
-    sprintf(text, "%d", Player.Points);
-    tumDrawText(text, 5, y, White);
-    sprintf(text, "Level: %d", (int)uxSemaphoreGetCount(Level));
-    tumDrawText(text, 350, y, White);
+
+    if(xSemaphoreTake(PlayerHandle, ( TickType_t ) 10 ) == pdTRUE){
+        sprintf(text, "SCORE: %d", Player.Points);
+        tumDrawText(text, 5, 5, White);
+        sprintf(text, "Level: %d", (int)uxSemaphoreGetCount(Level));
+        tumDrawText(text, 400, y, White);
+        sprintf(text, "%d", Player.Life+1);
+        tumDrawText(text, 5, y, White);
+
+        if(Player.Life >= 1){
+            tumDrawLoadedImage(Player.img, 23, y);
+        }
+        if(Player.Life >= 2){
+            tumDrawLoadedImage(Player.img, 29 + PLAYER_WIDTH, y);
+        }
+
+        xSemaphoreGive(PlayerHandle);
+    }
+    
 
 
-    tumDrawText("SCORE:   ", 5, 5, White);
     tumDrawText("HI_SCORE: ", 300, 5, White);
 }
 
@@ -50,52 +64,49 @@ void vRender(void *pvParameters){
     tumFontLoadFont("IBMPlexSans-SemiBold.ttf", 18);
     tumFontSelectFontFromName("IBMPlexSans-SemiBold.ttf");
 
+
     int fpsCount=0;
-    TickType_t lastWakeTime = xTaskGetTickCount();
+    TickType_t lastFPSCount = xTaskGetTickCount();
     TickType_t WakeTime;
-    int fps = MAX_FPS;
+    TickType_t diffTime;
     char fps_str[5];
+    TickType_t tick_diff;
+    TickType_t delay;
+    TickType_t startTime;
+    TickType_t endTime;
+
 
     
+    
     for(;;){
-        if(fpsCount==FPS_AVERAGE_COUNT){
-            WakeTime = xTaskGetTickCount();
-            fps = configTICK_RATE_HZ / (WakeTime - lastWakeTime);
-            fps = 2 * (MAX_FPS/FPS_AVERAGE_COUNT) * fps;
-            lastWakeTime = WakeTime;
+        WakeTime = xTaskGetTickCount();
+        diffTime = WakeTime - lastFPSCount;
+        fpsCount++;
+        if(diffTime > configTICK_RATE_HZ){
+            sprintf(fps_str, "%d", fpsCount);
             fpsCount = 0;
-        }else{
-            fpsCount++;
+            lastFPSCount = WakeTime;
         }
+        
+        startTime = xTaskGetTickCount();
 
 
 
         state_t * state = &States[State];
 
         state->paintFunc();
-        draw_mothership();
-        sprintf(fps_str, "%d", fps);
-        tumDrawText(fps_str, 250, 250, Yellow);
+        //sprintf(fps_str, "%d", tick_diff);
+        tumFontSetSize(30);
+        tumDrawText(fps_str, 250, SCREEN_HEIGHT - 36, Yellow);
         tumDrawUpdateScreen(); // Refresh the screen to draw string
 
-        vTaskDelay((TickType_t)RENDERDELAY);
+        endTime = xTaskGetTickCount();
+        tick_diff = endTime - startTime;
+        delay = RENDERDELAY - tick_diff;
+        vTaskDelay(delay);
     }
 
 }
-/*
-void drawButton(char * txt, int button_y){
-    tumFontSetSize(32);
-    
-    int button_x = (SCREEN_WIDTH - BUTTON_WIDTH)/2;
-    tumDrawFilledBox(button_x, button_y, BUTTON_WIDTH, BUTTON_HEIGHT, White);
-
-    int txt_width;
-    int txt_height;
-    tumGetTextSize(txt, &txt_width, &txt_height);
-    int txt_x = (SCREEN_WIDTH - txt_width)/2;
-    int txt_y = button_y + (BUTTON_HEIGHT-txt_height)/2;
-    tumDrawText(txt, txt_x, txt_y, Black);
-}*/
 
 void drawButton(button_t * button){
     tumFontSetSize(32);
@@ -156,9 +167,9 @@ void drawSingleplayerScreen(){
     xPaintBunkers();
 
     paint_invaders();
+    draw_mothership();
 
     paintUI();
-    xPaintPlayer();
 
     //paintMissileTypeA(50, 50, 3);
     xPaintMissiles();
@@ -201,6 +212,78 @@ void drawCheatScreen(){
 
 
     drawButtons();
+}
+
+
+void drawGameOverSingleplayerScreen(){
+    tumDrawClear(Black);
+    tumFontSetSize(52);
+    draw_centered_string("GAME OVER", 5, White);
+    int Highscore = 0;
+    int PlayerScore=0;
+    /*
+    if(xSemaphoreTake(PlayerHandle, ( TickType_t ) 10 ) == pdTRUE){
+        PlayerScore = Player.Points;
+        xSemaphoreGive(PlayerHandle);
+    }*/
+    PlayerScore = Player.Points;
+    
+
+    tumFontSetSize(30);
+    draw_centered_string("YOUR SCORE", 100, White);
+
+    char txt[15];
+    sprintf(txt, "%d", PlayerScore);
+    draw_centered_string(txt, 150, White);
+
+
+    if(xSemaphoreTake(HighscoreHandle, ( TickType_t ) 10 ) == pdTRUE){
+        Highscore = highScoreSingleplayer;
+        xSemaphoreGive(HighscoreHandle);
+    }
+    
+    draw_centered_string("HIGHSCORE", 300, White);
+    sprintf(txt, "%d", Highscore);
+    draw_centered_string(txt, 350, White);
+
+    drawButtons();
+
+}
+
+
+void drawGameOverMultiplayerScreen(){
+    tumDrawClear(Black);
+    tumFontSetSize(52);
+    draw_centered_string("GAME OVER", 5, White);
+    int Highscore = 0;
+    int PlayerScore=0;
+    /*
+    if(xSemaphoreTake(PlayerHandle, ( TickType_t ) 10 ) == pdTRUE){
+        PlayerScore = Player.Points;
+        xSemaphoreGive(PlayerHandle);
+    }*/
+    PlayerScore = Player.Points;
+    
+
+    tumFontSetSize(30);
+    draw_centered_string("YOUR SCORE", 100, White);
+
+    char txt[15];
+    sprintf(txt, "%d", PlayerScore);
+    draw_centered_string(txt, 150, White);
+
+
+    if(xSemaphoreTake(HighscoreHandle, ( TickType_t ) 10 ) == pdTRUE){
+        Highscore = highScoreMultiplayer;
+        xSemaphoreGive(HighscoreHandle);
+    }
+    
+    draw_centered_string("HIGHSCORE", 300, White);
+    sprintf(txt, "%d", Highscore);
+    draw_centered_string(txt, 350, White);
+
+    drawButtons();
+
 }
 
 

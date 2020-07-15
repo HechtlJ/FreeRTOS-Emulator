@@ -2,6 +2,8 @@
 #include "TUM_Draw.h"
 #include <stdio.h>
 #include "cannonball.h"
+#include "game.h"
+#include "missile.h"
 
 void playerInit(){
     Player.img = tumDrawLoadScaledImage("../resources/img/player.bmp", 1);
@@ -38,13 +40,13 @@ void xPaintPlayer(){
             xSemaphoreGive(PlayerHandle);
     }else{
         //do some error handling
-        printf("eroor in painintg player");
+        printf("error in painting player");
     }
 }
 
 
 void xPlayerMoveRight(){
-    if(xSemaphoreTake(PlayerHandle, NULL) == pdTRUE){
+    if(xSemaphoreTake(PlayerHandle, ( TickType_t ) 10) == pdTRUE){
             player_move_right();
             xSemaphoreGive(PlayerHandle);
     }else{
@@ -54,7 +56,7 @@ void xPlayerMoveRight(){
 
 
 void xPlayerMoveLeft(){
-    if(xSemaphoreTake(PlayerHandle, NULL) == pdTRUE){
+    if(xSemaphoreTake(PlayerHandle, ( TickType_t ) 10) == pdTRUE){
             player_move_left();
             xSemaphoreGive(PlayerHandle);
     }else{
@@ -63,7 +65,7 @@ void xPlayerMoveLeft(){
 }
 
 void xPlayerShoot(){
-    if(xSemaphoreTake(PlayerHandle, NULL) == pdTRUE){
+    if(xSemaphoreTake(PlayerHandle, ( TickType_t ) 10) == pdTRUE){
             player_shoot();
             xSemaphoreGive(PlayerHandle);
     }else{
@@ -72,7 +74,7 @@ void xPlayerShoot(){
 }
 
 void xResetPlayer(){
-    if(xSemaphoreTake(PlayerHandle, NULL) == pdTRUE){
+    if(xSemaphoreTake(PlayerHandle, ( TickType_t ) 10) == pdTRUE){
             reset_player();
             xSemaphoreGive(PlayerHandle);
     }else{
@@ -80,9 +82,54 @@ void xResetPlayer(){
     }
 }
 
+int xCheckPlayerHit(int x, int y, int height){
+    if(xSemaphoreTake(PlayerHandle, NULL) == pdTRUE){
+            int ret = check_player_hit(x,y, height);
+            xSemaphoreGive(PlayerHandle);
+            return ret;
+    }else{
+        //do some error handling
+    }
+}
+
+int check_player_hit(int x, int y, int height){
+    if((y + height) < PLAYER_Y_COORD){
+        return 0; // No Hit
+    }if(y > (PLAYER_Y_COORD + PLAYER_HEIGTH)){
+        return 0; // No Hit
+    }if(x < Player.x_coord){
+        return 0; // No Hit
+    }if(x > (Player.x_coord + PLAYER_WIDTH)){
+        return 0; // No Hit
+    }
+    player_reduce_life();
+    return 1;
+}
+
+
 
 void reset_player(){
     Player.x_coord = 200;
     Player.Points = 0;
     Player.Life = 2;
+}
+
+
+void player_reduce_life(){
+    bool unlimited_lives;
+    if(xSemaphoreTake(CheatsHandle, ( TickType_t ) 10 ) == pdTRUE){
+            unlimited_lives = Cheats.unlimitedLives;
+            xSemaphoreGive(CheatsHandle);
+    }
+    if(unlimited_lives){
+        return;
+    }
+    
+    if(Player.Life==0){
+        switchToGameOver();
+    }else{
+        reset_missiles();
+        Player.Life--;
+    }
+
 }

@@ -114,5 +114,8 @@ void playerInit();
 void xResetPlayer();
 void reset_player();
 
+int xCheckPlayerHit(int x, int y, int height);
+int check_player_hit(int x, int y, int height);
+
 
 #endif /* PLAYER_H */
