@@ -294,7 +294,7 @@ void switchToGameOver(){
             highScoreSingleplayer = Player.Points;
         }
     }
-    if(State == STATE_PAUSE_MULTIPLAYER){
+    if(State == STATE_MULTIPLAYER){
         State = STATE_GAMEOVER_MULTYPLAYER;
         if(Player.Points>highScoreMultiplayer){
             highScoreMultiplayer = Player.Points;
