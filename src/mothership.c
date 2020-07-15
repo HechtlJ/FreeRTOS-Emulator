@@ -9,6 +9,7 @@
 #include "player.h"
 #include "game.h"
 #include "cannonball.h"
+#include "semphr.h"
 
 #define UDP_BUFFER_SIZE 1024
 #define UDP_RECEIVE_PORT 1234
@@ -19,8 +20,8 @@ TaskHandle_t MothershipTask;
 
 void handle(size_t read_size, char *buffer, void *args)
 {
-	/* Block time of 0 says don't block if the queue is already full.*/
-
+	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+	int msg;
 	if (strcmp(buffer, "INC") == 0) {
 		msg = MOTHERSHIP_SPEED;
 	} else if (strcmp(buffer, "DEC") == 0) {
@@ -28,8 +29,8 @@ void handle(size_t read_size, char *buffer, void *args)
 	} else {
 		msg = 0;
 	}
-
-	xQueueSendFromISR(OpponentQueue, (void *)&msg, (TickType_t)0);
+	xQueueSendFromISR(OpponentQueue, (void *)&msg, &xHigherPriorityTaskWoken);
+	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
 void init_udp()
@@ -249,45 +250,3 @@ int mothership_check_hit(int x, int y, int height){
     kill_mothership();
     return 1;
 }
-
-/*
-void vUDPControlTask(void *pvParameters)
-{
-    static char buf[50];
-    char *addr = NULL; // Loopback
-    in_port_t port = UDP_RECEIVE_PORT;
-    unsigned int ball_y = 0;
-    unsigned int paddle_y = 0;
-    char last_difficulty = -1;
-    char difficulty = 1;
-
-    udp_soc_receive =
-        aIOOpenUDPSocket(addr, port, UDP_BUFFER_SIZE, UDPHandler, NULL);
-
-    printf("UDP socket opened on port %d\n", port);
-
-    while (1) {
-        vTaskDelay(pdMS_TO_TICKS(15));
-        while (xQueueReceive(BallYQueue, &ball_y, 0) == pdTRUE) {
-        }
-        while (xQueueReceive(PaddleYQueue, &paddle_y, 0) == pdTRUE) {
-        }
-        while (xQueueReceive(DifficultyQueue, &difficulty, 0) == pdTRUE) {
-        }
-        signed int diff = ball_y - paddle_y;
-        if (diff > 0) {
-            sprintf(buf, "+%d", diff);
-        }
-        else {
-            sprintf(buf, "-%d", -diff);
-        }
-        aIOSocketPut(UDP, NULL, UDP_TRANSMIT_PORT, buf,
-                     strlen(buf));
-        if (last_difficulty != difficulty) {
-            sprintf(buf, "D%d", difficulty + 1);
-            aIOSocketPut(UDP, NULL, UDP_TRANSMIT_PORT, buf,
-                         strlen(buf));
-            last_difficulty = difficulty;
-        }
-    }
-}*/

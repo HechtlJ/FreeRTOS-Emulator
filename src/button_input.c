@@ -125,7 +125,7 @@ void buttonInit(){
 
     // Starting the Task
     if(xTaskCreate(vHandleButtons, "ButtonTask", mainGENERIC_STACK_SIZE*2, NULL,
-     configMAX_PRIORITIES-1, &ButtonTask) != pdPASS) {
+     configMAX_PRIORITIES, &ButtonTask) != pdPASS) {
          //PRINT_TASK_ERROR("RenderTask");
          //goto err_rendertask;
     }

@@ -83,7 +83,7 @@ void xResetPlayer(){
 }
 
 int xCheckPlayerHit(int x, int y, int height){
-    if(xSemaphoreTake(PlayerHandle, NULL) == pdTRUE){
+    if(xSemaphoreTake(PlayerHandle, ( TickType_t ) 10) == pdTRUE){
             int ret = check_player_hit(x,y, height);
             xSemaphoreGive(PlayerHandle);
             return ret;
