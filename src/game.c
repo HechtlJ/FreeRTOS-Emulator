@@ -317,7 +317,7 @@ void startSingleplayer(){
     xResetMissiles();
     invader_reset(0);
     switchToSingleplayer();
-    // init_level???
+    Player.Points = Cheats.startingScore;
 }
 
 
@@ -330,7 +330,7 @@ void startMultiplayer(){
     xResetMissiles();
     invader_reset(0);
     switchToMultiplayer();
-    // init_level???
+    Player.Points = Cheats.startingScore;
 }
 
 

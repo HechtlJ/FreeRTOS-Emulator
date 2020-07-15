@@ -44,8 +44,9 @@ void paintUI(){
     }
     
 
+    tumFontSetSize(17);
+    tumDrawText("Arrow for Movement | [SPACE] SHOOT | [P] PAUSE ", 140, 5, White);
 
-    tumDrawText("HI_SCORE: ", 300, 5, White);
 }
 
 void xPaintUI(){
@@ -202,7 +203,7 @@ void drawCheatScreen(){
     draw_centered_string("UNLIMITED CANNONBALLS", 200, White);
 
     draw_centered_string("STARTING SCORE", 310, White);
-    char * txt[50];
+    char txt[50];
     sprintf(txt, "<<< [w] << [e] <   %d   > [r] >> [t] >>>", Cheats.startingScore);
     draw_centered_string(txt, 350, White);
 
