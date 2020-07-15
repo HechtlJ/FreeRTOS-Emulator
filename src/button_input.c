@@ -125,7 +125,7 @@ void buttonInit(){
 
     // Starting the Task
     if(xTaskCreate(vHandleButtons, "ButtonTask", mainGENERIC_STACK_SIZE*2, NULL,
-     configMAX_PRIORITIES, &ButtonTask) != pdPASS) {
+     configMAX_PRIORITIES-1, &ButtonTask) != pdPASS) {
          //PRINT_TASK_ERROR("RenderTask");
          //goto err_rendertask;
     }
@@ -207,7 +207,7 @@ void vHandleButtons(void *pvParameters){
             mouseDebounce--;
         }
 
-        if (xSemaphoreTake(buttons.lock, 0) == pdTRUE) {
+        if (xSemaphoreTake(buttons.lock, (TickType_t) 10) == pdTRUE) {
             for(int i=0; i<NUM_KEY_ACTIONS; i++){
                 handleKeyAction(&KeyActions[i]);
             }
