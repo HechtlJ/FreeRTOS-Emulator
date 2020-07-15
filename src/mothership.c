@@ -20,7 +20,7 @@ TaskHandle_t MothershipTask;
 
 void handle(size_t read_size, char *buffer, void *args)
 {
-	BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+	//BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 	int msg;
 	if (strcmp(buffer, "INC") == 0) {
 		msg = MOTHERSHIP_SPEED;
@@ -29,8 +29,9 @@ void handle(size_t read_size, char *buffer, void *args)
 	} else {
 		msg = 0;
 	}
-	xQueueSendFromISR(OpponentQueue, (void *)&msg, &xHigherPriorityTaskWoken);
-	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+	//xQueueSendFromISR(OpponentQueue, (void *)&msg, &xHigherPriorityTaskWoken);
+	xQueueSendFromISR(OpponentQueue, (void *)&msg, NULL);
+	//portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 
 void init_udp()
