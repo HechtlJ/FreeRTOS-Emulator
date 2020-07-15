@@ -10,7 +10,7 @@
 #define mainGENERIC_STACK_SIZE ((unsigned short)2560)
 
 
-#define MAX_FPS 60
+#define MAX_FPS 30
 #define RENDERDELAY 1000/MAX_FPS
 
 
