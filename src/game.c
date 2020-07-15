@@ -10,6 +10,22 @@
 #include "mothership.h"
 
 
+int xGetState(){
+    int ret=0;
+    if (xSemaphoreTake(StateHandle, (TickType_t)10) == pdTRUE) {
+        ret = State;
+		xSemaphoreGive(StateHandle);
+	} 
+    return ret;
+}
+
+void xSetState(int new_state){
+    if (xSemaphoreTake(StateHandle, (TickType_t)10) == pdTRUE) {
+        State = new_state;
+		xSemaphoreGive(StateHandle);
+	} 
+}
+
 void init_levels(){
     Level = xSemaphoreCreateCounting(9999, 1);
 }

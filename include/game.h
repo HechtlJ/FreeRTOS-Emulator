@@ -26,6 +26,10 @@ typedef struct{
 
 state_t States[NUM_STATES];
 int State;
+SemaphoreHandle_t StateHandle;
+
+int xGetState();
+void xSetState(int state);
 
 
 SemaphoreHandle_t  Level;

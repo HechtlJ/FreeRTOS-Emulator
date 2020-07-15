@@ -133,7 +133,7 @@ void drawButton(button_t * button){
 void renderInit(void)
 {
     if(xTaskCreate(vRender, "RenderingTask", mainGENERIC_STACK_SIZE*2, NULL,
-     configMAX_PRIORITIES-1, &RenderingTask) != pdPASS) {
+     configMAX_PRIORITIES-2, &RenderingTask) != pdPASS) {
          //PRINT_TASK_ERROR("RenderTask");
          goto err_rendertask;
     }
