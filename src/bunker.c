@@ -67,7 +67,7 @@ int check_bunker_hit(int x, int y, bool moving_up, int damage){
             if(x >= Bunkers[i].x_coord && x < Bunkers[i].x_coord+BUNKER_WIDTH){
                 hit_x = x-Bunkers[i].x_coord;
                 hit_x = hit_x/4;
-                for(int hit_y=0-1; hit_y<NUM_BUNKER_BLOCK_Y; hit_y++){
+                for(int hit_y=0; hit_y<NUM_BUNKER_BLOCK_Y; hit_y++){
                     if(Bunkers[i].BunkerBlocks[hit_x][hit_y]==true){
                         damage_bunker(&Bunkers[i], hit_x, hit_y, damage);
                         return 1;   // Hit
